@@ -54,6 +54,11 @@ export const getColor = (colorId) => {
   return store.color[colorId];
 }
 
+export const getShadow = (shadowId) => {
+  return store.shadow[shadowId];
+}
+
+
 /* from pablo on https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors */
 export const shadeColor = (colId, percent) => {
   var color = store.color[colId] || colId;

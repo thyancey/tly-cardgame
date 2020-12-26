@@ -1,0 +1,35 @@
+{
+  "config":{
+  },
+  "cards":[
+    {
+      "title": "sample_kingc",
+      "imageUrl": "./assets/cards/KC.jpg"
+    },
+    {
+      "title": "sample_jokers",
+      "imageUrl": "./assets/cards/JS.jpg"
+    },
+    {
+      "title": "sample_queenh",
+      "imageUrl": "./assets/cards/QH.jpg"
+    },
+    {
+      "title": "sample_aced",
+      "imageUrl": "./assets/cards/AD.jpg"
+    }
+  ],
+  "assets":[
+    {
+      "id": "frog",
+      "url": "./assets/frog.png",
+      "meta": [
+        ["animalType", "amphibian"],
+        ["animal", "frog"],
+        ["color", "green"],
+        ["style", "cartoon"],
+        ["intelligence", "stupid"]
+      ]
+    }
+  ]
+}
