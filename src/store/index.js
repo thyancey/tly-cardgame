@@ -50,6 +50,7 @@ function Store({children}) {
   // const [ deck, setDeck ] = useState(data.cards);
   const [ deck, setDeck ] = useState(createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
+  const [ stacks, setStacks ] = useState([]);
 
   const discardCard = useCallback(cardIdx => {
     setHand(hand.filter(h => h.cardIdx !== cardIdx));
@@ -176,6 +177,7 @@ function Store({children}) {
         hand: hand,
         deck: deck,
         zones: zones,
+        stacks: stacks,
         setZone: setZone,
         setHoldingIdx: setHoldingIdx,
         dropCard: dropCard,

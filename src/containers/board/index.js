@@ -77,15 +77,15 @@ function Board() {
         <S.BasicButton onClick={() => dealCard(1)}>
           {'deal one'}
         </S.BasicButton>
-      </S.DrawZone>
-      <S.InfoZone>
-        <p>{'info'}</p>
         <S.BasicButton onClick={() => discardRandomCard()}>
           {'discard random'}
         </S.BasicButton>
         <S.BasicButton onClick={() => discardHand()}>
           {'discard hand'}
         </S.BasicButton>
+      </S.DrawZone>
+      <S.InfoZone>
+        <p>{'info'}</p>
       </S.InfoZone>
       <S.DiscardZone>
         <DropZone action={'discard'} />
