@@ -14,8 +14,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Indie+Flower&family=Roboto&display=swap);
 $font-roboto: 'Roboto', sans-serif;
+$font-indieflower: 'Indie Flower', cursive;
 
 html{
   font-size: 62.5%;
@@ -29,6 +30,11 @@ p, span, h1, h2, h3, h4, h5, h6{
 }
 
 h1, h2, h3, h4{
+  font-family: $font-indieflower;
+}
+p, span, h5, h6{
+  margin:0;
+  padding:0;
   font-family: $font-roboto;
 }
 
