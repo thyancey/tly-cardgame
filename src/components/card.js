@@ -5,43 +5,38 @@ import { getShadow } from '../themes/index';
 
 const S = {};
 
+// const HOLD_OFFSET = {
+//   x: -100,
+//   y: -140
+// }
+// const DROP_OFFSET = {
+//   x: -70,
+//   y: -95
+// }
+
 const HOLD_OFFSET = {
-  // x: -60,
-  // y: -90
-  x: -100,
-  y: -140
+  x: 0,
+  y: 0
 }
 const DROP_OFFSET = {
-  x: -70,
-  y: -95
+  x: 0,
+  y: 0
 }
 
 S.Card = styled.div`
   background-color: ${p => p.theme || 'white'};
   border-radius:1rem;
   color:black;
-  width:10rem;
-  height:15rem;
-  margin:2rem;
-  transition: width .2s, height .2s, opacity .5;
 
-  display:inline-block;
+  /* margin:7.5rem 5rem; */
   box-shadow: ${getShadow('z3')};
-  /* transition: top .3s, left .3s; */
-  position:relative;
 
-  ${p => p.manualPlacement && css`
-    position:fixed;
-  `}
+  position:fixed;
 
   z-index: ${p => p.depth};
   ${p => p.isDragging && css`
-    width: 16rem;
-    height: 24rem;
     z-index:1000;
-    opacity: .5;
   `}
-
 
   p{
     position:absolute;
@@ -51,6 +46,28 @@ S.Card = styled.div`
     margin-top:.5rem;
     font-weight:bold;
   }
+`;
+
+S.InnerCard = styled.div`
+  position:absolute;
+  width:10rem;
+  height:15rem;
+  transform-origin: 50% 50%;
+  left: -5rem;
+  top: -7.5rem;
+  /* transform: translate(-50%, -50%); */
+  /* transition: transform .2s cubic-bezier(.42,.05,.86,.13), opacity .2s; */
+    transition: transform .3s cubic-bezier(1,.05,.32,1.2), opacity .3s;
+
+
+  ${p => p.isDragging && css`
+  transform: scaleX(2) scaleY(2);
+    ${'' /* width: 16rem;
+    height: 24rem; */}
+    opacity: .5;
+    ${'' /* transition: transform .4s cubic-bezier(1,.05,.32,1.2), opacity .2s; */}
+    transition: transform .1s cubic-bezier(.42,.05,.86,.13), opacity .2s;
+  `}
 `;
 
 S.Background = styled.img`
@@ -139,10 +156,10 @@ function Card({ data, theme='white' }) {
         top: `${position.y}px`,
       }}
     >
-      <div>
+      <S.InnerCard isDragging={!!state.dragPosition}>
         <S.Background src={data.info.imageUrl} draggable={false} />
         <p>{data.info.title}</p>
-      </div>
+      </S.InnerCard>
     </S.Card>
   );
 }
