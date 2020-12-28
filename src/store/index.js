@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { StoreContext } from './context';
 import data from './data.json';
 
+let topLayer = 0;
+
 function getCardAtIdx(cardData, cardIdx){
   const card = cardData[cardIdx];
   if(!card) return null;
@@ -60,6 +62,7 @@ function Store({children}) {
       if(h.cardIdx === cardIdx){
         return {
           ...h,
+          layer: topLayer++,
           position:{
             x: newPosition.x,
             y: newPosition.y
@@ -73,6 +76,8 @@ function Store({children}) {
 
   const dealHand = useCallback(cardCount => {
     let newHand = [];
+    topLayer = 1;
+    
     for(let i = 0; i < cardCount; i++){
       let randIdx = Math.floor(Math.random() * deck.length);
       let randX = Math.random() * 500;
@@ -83,6 +88,7 @@ function Store({children}) {
         info: deck[randIdx],
         status:null, 
         manualPlacement: true, 
+        layer: topLayer++,
         position: {
           x: randX,
           y: randY 
