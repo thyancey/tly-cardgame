@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { StoreContext } from '../store/context';
 import { getShadow } from '../themes/index';
@@ -55,17 +55,11 @@ S.InnerCard = styled.div`
   transform-origin: 50% 50%;
   left: -5rem;
   top: -7.5rem;
-  /* transform: translate(-50%, -50%); */
-  /* transition: transform .2s cubic-bezier(.42,.05,.86,.13), opacity .2s; */
-    transition: transform .3s cubic-bezier(1,.05,.32,1.2), opacity .3s;
-
+  transition: transform .3s cubic-bezier(1,.05,.32,1.2), opacity .3s;
 
   ${p => p.isDragging && css`
-  transform: scaleX(2) scaleY(2);
-    ${'' /* width: 16rem;
-    height: 24rem; */}
+    transform: scaleX(1.5) scaleY(1.5);
     opacity: .5;
-    ${'' /* transition: transform .4s cubic-bezier(1,.05,.32,1.2), opacity .2s; */}
     transition: transform .1s cubic-bezier(.42,.05,.86,.13), opacity .2s;
   `}
 `;
@@ -92,21 +86,25 @@ function usePosition(restingPosition, dragPosition){
 }
 
 function Card({ data, theme='white' }) {
-  const { setCardPosition } = useContext(StoreContext);
+  const { setCardPosition, setHoldingIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
     dragPosition: null
   });
 
-  const onMouseDown = useCallback(({ clientX, clientY }) => {
+  const cardRef = useRef(null);
+
+  const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
+    setHoldingIdx(cardIdx);
+
     setState(state => ({
       ...state,
       dragPosition: {
         x: clientX + HOLD_OFFSET.x,
         y: clientY + HOLD_OFFSET.y
       }
-    }))
-  }, []);
+    }));
+  }, [ setHoldingIdx ]);
 
   const onMouseMove = useCallback(({ clientX, clientY }) => {
     setState(state => ({
@@ -128,29 +126,28 @@ function Card({ data, theme='white' }) {
     setCardPosition(data.cardIdx, {
       x: clientX + DROP_OFFSET.x,
       y: clientY + DROP_OFFSET.y
-    });
+    }, true);
   }, [ data.cardIdx, setCardPosition ]);
 
-  
   useEffect(() => {
     if(!!state.dragPosition){
-      global.addEventListener('mousemove', onMouseMove);
-      global.addEventListener('mouseup', onMouseUp);
+      cardRef.current.addEventListener('mousemove', onMouseMove);
+      cardRef.current.addEventListener('mouseup', onMouseUp);
     }else{
-      global.removeEventListener('mousemove', onMouseMove);
-      global.removeEventListener('mouseup', onMouseUp);
+      cardRef.current.removeEventListener('mousemove', onMouseMove);
+      cardRef.current.removeEventListener('mouseup', onMouseUp);
     }
   }, [ state.dragPosition, onMouseMove, onMouseUp ])
 
-  let position = usePosition(data.position, state.dragPosition);
+  let position = usePosition(data.position, state.dragPosition, cardRef);
 
   return (
     <S.Card 
       theme={theme} 
-      manualPlacement={data.manualPlacement} 
       isDragging={!!state.dragPosition}
-      onMouseDown={onMouseDown}
+      onMouseDown={e => onMouseDown(e, data.cardIdx)}
       depth={data.layer}
+      ref={cardRef}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
 import Card from '../../components/card';
 import { getColor } from '../../themes/index';
+import DropZone from './components/drop-zone';
 
 const S = {};
 
@@ -35,13 +36,9 @@ S.Board = styled.div`
   background-color:${getColor('red')};
 `;
 
-S.DealButton = styled.button`
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  top:0;
+S.BasicButton = styled.button`
   padding: .5rem 1.5rem;
-  font-size: 2rem;
+  font-size: 1rem;
 `;
 
 S.DrawZone = styled.div`
@@ -65,30 +62,39 @@ S.InfoZone = styled.div`
   border: .2rem dashed black;
 `;
 
-
 function Board() {
-  const { holdingIdx, dealHand, hand } = useContext(StoreContext);
+  const { holdingIdx, dealHand, dealCard, discardRandomCard, discardHand, hand } = useContext(StoreContext);
 
-  // const holdingColor = useAlternateColors(holdingIdx);
-  
   return (
     <S.Board>
       <S.DrawZone>
-        <S.DealButton onClick={() => dealHand(10)}>
-          {'deal'}
-        </S.DealButton>
+        <S.BasicButton onClick={() => dealHand(10)}>
+          {'deal only 10'}
+        </S.BasicButton>
+        <S.BasicButton onClick={() => dealCard(10)}>
+          {'deal 10 more'}
+        </S.BasicButton>
+        <S.BasicButton onClick={() => dealCard(1)}>
+          {'deal one'}
+        </S.BasicButton>
       </S.DrawZone>
       <S.InfoZone>
         <p>{'info'}</p>
+        <S.BasicButton onClick={() => discardRandomCard()}>
+          {'discard random'}
+        </S.BasicButton>
+        <S.BasicButton onClick={() => discardHand()}>
+          {'discard hand'}
+        </S.BasicButton>
       </S.InfoZone>
       <S.DiscardZone>
-        <p>{'discard'}</p>
+        <DropZone action={'discard'} />
       </S.DiscardZone>
 
-      {hand.map((h,idx) => 
-        <Card data={h} key={idx} />
+      {hand.map((c, idx) => 
+        <Card data={c} key={c.cardIdx} />
       )}
-      
+
       <S.FooterZone>
         <p>{'some info text here'}</p>
       </S.FooterZone>
