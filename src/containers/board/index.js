@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
 import Card from '../../components/card';
@@ -33,7 +33,7 @@ S.Board = styled.div`
     'g-footer g-discard';
 
   border:.2rem solid black;
-  background-color:${getColor('red')};
+  background-color:${getColor('grey')};
 `;
 
 S.BasicButton = styled.button`
@@ -63,7 +63,7 @@ S.InfoZone = styled.div`
 `;
 
 function Board() {
-  const { holdingIdx, dealHand, dealCard, discardRandomCard, discardHand, hand } = useContext(StoreContext);
+  const { dealHand, dealCard, discardRandomCard, discardHand, hand } = useContext(StoreContext);
 
   return (
     <S.Board>

@@ -1,7 +1,6 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import styled, { } from 'styled-components';
 import { StoreContext } from '../../../store/context';
-import { getColor, getShadow } from '../../../themes/index';
 
 const S = {};
 
@@ -31,7 +30,7 @@ S.Zone = styled.div`
 
 
 function DropZone() {
-  const { zones, setZone } = useContext(StoreContext);
+  const { setZone } = useContext(StoreContext);
   const zoneRef = useRef(null);
   // let registeredZone = false;
 
@@ -41,7 +40,7 @@ function DropZone() {
 
   useEffect(() => {
     if(!state.registeredZone){
-      console.log(zoneRef.current.getBoundingClientRect())
+      // console.log(zoneRef.current.getBoundingClientRect());
       setZone('discard', zoneRef.current.getBoundingClientRect());
       setState({registeredZone: true});
     }

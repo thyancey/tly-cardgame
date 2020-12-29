@@ -13,7 +13,7 @@ S.Container = styled.div`
   padding:1rem;
   overflow:hidden;
 
-  background-color:${getColor('grey')};
+  background-color:${getColor('black')};
 `;
 
 S.Header = styled.h1`
