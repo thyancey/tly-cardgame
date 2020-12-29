@@ -1,5 +1,6 @@
 {
   "name": "tly-react-2020",
+  "homepage": "./",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

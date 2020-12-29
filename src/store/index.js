@@ -1,116 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { StoreContext } from './context';
 import data from './data.json';
+import StackHelper from './helpers/stack';
 
 let topLayer = 0;
-
-const O = {
-  W: 50,
-  H: 75
-}
-
-const isThisInThat = (aA, aB) => {
-  if(!aA) console.error('aA invalid')
-  if(!aB) console.error('aB invalid')
-  let foundIdx = aA.findIndex(a => aB.indexOf(a) > -1);
-  return foundIdx > -1;
-}
-
-const mergeArrays = (aA, aB) => {
-  return aA.concat(aB.filter((b) => aA.indexOf(b) < 0));
-}
-
-/* this is too complicated, gotta be a better way
-  input
-    [ 0, 1, 2]
-    [ 5, 6 ]
-    [ 7, 8 ]
-    [ 1, 5]
-
-  output
-    [ 0, 1, 2, 5, 6 ]
-    [ 7, 8 ]
-*/
-const collapseGroups = groups => {
-  // console.log('--------- collapsing groups:', groups)
-  let collapsed = [];
-  for(let g = groups.length - 1; g >= 0; g--){
-    if(collapsed.length === 0){
-      collapsed.push(groups[g]);
-      groups.pop();
-    }else{
-      for(let c = 0; c < collapsed.length; c++){
-        if(isThisInThat(collapsed[c], groups[g])){
-          collapsed[c] = mergeArrays(collapsed[c], groups[g]);
-          groups.pop();
-          break;
-        }else{
-          collapsed.push(groups.pop());
-          break;
-        }
-  
-      }
-    }
-  }
-
-  return collapsed;
-}
-
-  /* This works, but sure seems like it could be simplified!
-    - compares bounds of all cards
-    - returns list of "stacks" of unique cardIdxs that are touching
-    - there is so much dirty mutation throughout here and probably some big inefficiencies
-    ->  [ [ 0, 2, 5], [ 1, 3 ] ]
-  */
- const calcStacks = (hand) => {
-  let groupPairs = [];
-
-  // cards only start with position
-  const boundedHand = hand.map(c => ({
-    cardIdx: c.cardIdx,
-    bounds: produceBounds(c.position)
-  }));
-
-  // do some weird loopin to avoid checking the same pair twice
-  for(let a = 0; a < boundedHand.length; a++){
-    for(let b = a + 1; b < boundedHand.length; b++){
-      if(doesOverlap(boundedHand[a].bounds, boundedHand[b].bounds)){
-        groupPairs.push([boundedHand[a].cardIdx, boundedHand[b].cardIdx]);
-      }
-    }
-  }
-
-  /*
-  //- now have a list of..
-    [0, 1]
-    [1, 2]
-    [4, 5]
-
-  // so convert to
-    [0, 1, 2]
-    [4, 5]
-  */
-  let finalGroups = [];
-  groupPairs.forEach(gP => {
-    finalGroups = collapseGroups(finalGroups.slice());
-    let foundIdx = finalGroups.findIndex(fg => (fg.indexOf(gP[0]) > -1 || fg.indexOf(gP[1]) > -1));
-    if(foundIdx > -1){
-      gP.forEach(gPC => {
-        if(finalGroups[foundIdx].indexOf(gPC) === -1){
-          finalGroups[foundIdx] = finalGroups[foundIdx].concat(gPC);
-        }
-      })
-    }else{
-      finalGroups.push(gP);
-    }
-  })
-
-  return finalGroups;
-} 
-
-const doesOverlap = (bA, bB) => {
-  return bA.top <= bB.bottom && bA.bottom >= bB.top && bA.left <= bB.right && bA.right >= bB.left;
-}
 
 const getCardAtIdx = (cardData, cardIdx) => {
   const card = cardData[cardIdx];
@@ -133,7 +26,6 @@ const createTraditionalDeck = () => {
   )).flat()
 }
 
-
 const produceCard = (cardIdx, deck) => {
   let randIdx = Math.floor(Math.random() * deck.length);
   let newPos = {
@@ -151,15 +43,6 @@ const produceCard = (cardIdx, deck) => {
   }
 }
 
-const produceBounds = position => {
-  return {
-    left: position.x - O.W,
-    top: position.y - O.H,
-    right: position.x + O.W,
-    bottom: position.y + O.H
-  }
-}
-
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
@@ -169,7 +52,7 @@ function Store({children}) {
   const [ stacks, setStacks ] = useState([]);
 
   const setHand = useCallback((hand) => {
-    const stacks = calcStacks(hand);
+    const stacks = StackHelper.calcStacks(hand);
     setStacks(stacks);
     
     setHandRaw(hand.map(c => ({
