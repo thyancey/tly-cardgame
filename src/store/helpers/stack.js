@@ -54,6 +54,10 @@ const getGroupPairs = boundedHand => {
   return groupPairs;
 }
 
+const findStackWithMatch = (stacks, groupPair) => {
+  return stacks.findIndex(stack => (stack.indexOf(groupPair[0]) > -1 || stack.indexOf(groupPair[1]) > -1));
+}
+
 /*
   //- now have a list of..
     [0, 1]
@@ -64,62 +68,47 @@ const getGroupPairs = boundedHand => {
     [0, 1, 2]
     [4, 5]
 */
-const createFinalGroups = groupPairs => {
-  let finalGroups = [];
+const mutateForGroupPairs = (stacks, groupPairs) => {
+  let matchFound = false;
 
-  groupPairs.forEach(gP => {
-    finalGroups = ThisModule.collapseGroups(finalGroups.slice());
-    let foundIdx = finalGroups.findIndex(fg => (fg.indexOf(gP[0]) > -1 || fg.indexOf(gP[1]) > -1));
-    if(foundIdx > -1){
-      gP.forEach(gPC => {
-        if(finalGroups[foundIdx].indexOf(gPC) === -1){
-          finalGroups[foundIdx] = finalGroups[foundIdx].concat(gPC);
-        }
-      })
-    }else{
-      finalGroups.push(gP);
-    }
-  })
-
-  return finalGroups;
-}
-
-/* this is too complicated, gotta be a better way
-  input
-    [ 0, 1, 2]
-    [ 5, 6 ]
-    [ 7, 8 ]
-    [ 1, 5]
-
-  output
-    [ 0, 1, 2, 5, 6 ]
-    [ 7, 8 ]
-*/
-const collapseGroups = groups => {
-  // console.log('--------- collapsing groups:', groups)
-  let collapsed = [];
-  for(let g = groups.length - 1; g >= 0; g--){
-    if(collapsed.length === 0){
-      collapsed.push(groups[g]);
-      groups.pop();
-    }else{
-      for(let c = 0; c < collapsed.length; c++){
-        if(ThisModule.isThisInThat(collapsed[c], groups[g])){
-          collapsed[c] = ThisModule.mergeArrays(collapsed[c], groups[g]);
-          groups.pop();
-          break;
-        }else{
-          collapsed.push(groups.pop());
-          break;
-        }
-  
-      }
+  // find the next stack
+  for(let i = groupPairs.length - 1; i >= 0; i--){
+    const foundStackIdx = ThisModule.findStackWithMatch(stacks, groupPairs[i]);
+    if(stacks.length === 0){
+      stacks.push(groupPairs[i]);
+      groupPairs.splice(i, 1);
+      matchFound = true;
+    } else if(foundStackIdx > -1){
+      stacks[foundStackIdx] = ThisModule.mergeArrays(stacks[foundStackIdx], groupPairs[i]);
+      groupPairs.splice(i, 1);
+      matchFound = true;
     }
   }
+  
+  if(!matchFound && groupPairs.length > 0){
+    stacks.push(groupPairs[groupPairs.length - 1]);
+  }
 
-  return collapsed;
-};
+  return {
+    stacks: stacks,
+    groupPairs: groupPairs
+  };
+}
 
+const createFinalStacks = givenGroupPairs => {
+  if(!givenGroupPairs || givenGroupPairs.length === 0) return [];
+
+  let stacks = [];
+  let remainingGroupPairs = givenGroupPairs.slice();
+  while(remainingGroupPairs.length > 0){
+    // find the next stack
+    const matchObj = ThisModule.mutateForGroupPairs(stacks, remainingGroupPairs);
+    stacks = matchObj.stacks;
+    remainingGroupPairs = matchObj.groupPairs;
+  }
+
+  return stacks;
+}
 
 /* This works, but sure seems like it could be simplified!
   - compares bounds of all cards
@@ -130,8 +119,7 @@ const collapseGroups = groups => {
 const calcStacks = (hand) => {
   const boundedHand = ThisModule.createBoundedHand(hand);
   const groupPairs = ThisModule.getGroupPairs(boundedHand);
-  const finalGroups = ThisModule.createFinalGroups(groupPairs);
-  return finalGroups;
+  return ThisModule.createFinalStacks(groupPairs);
 };
 
 export default {
@@ -141,7 +129,8 @@ export default {
   createBoundedHand: createBoundedHand,
   doesOverlap: doesOverlap,
   getGroupPairs: getGroupPairs,
-  createFinalGroups: createFinalGroups,
-  collapseGroups: collapseGroups,
+  createFinalStacks: createFinalStacks,
+  findStackWithMatch: findStackWithMatch,
   calcStacks: calcStacks,
+  mutateForGroupPairs: mutateForGroupPairs,
 };

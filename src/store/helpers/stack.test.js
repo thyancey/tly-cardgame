@@ -112,15 +112,131 @@ describe('store.helpers.stack', () => {
     });
   });
 
+  describe.skip('#produceBounds', () => {
+    it('simple enough to skip for now', () => {
+      expect(true).toBe(false);
+    });
+  });
+  describe.skip('#createBoundedHand', () => {
+    it('simple enough to skip for now', () => {
+      expect(true).toBe(false);
+    });
+  });
   describe.skip('#doesOverlap', () => {
     it('simple enough to skip for now', () => {
       expect(true).toBe(false);
     });
   });
 
+  describe('#findStackWithMatch', () => {
+    it('should find normal match', () => {
+      const stacks = [
+        [0, 1, 2],
+        [3, 4]
+      ];
+      const groupPair = [ 2, 5 ];
+
+      expect(StackHelper.findStackWithMatch(stacks, groupPair)).toEqual(0);
+    });
+
+    it('should find another match', () => {
+      const stacks = [
+        [0, 1, 2],
+        [3, 4]
+      ];
+      const groupPair = [ 3, 5 ];
+
+      expect(StackHelper.findStackWithMatch(stacks, groupPair)).toEqual(1);
+    });
+
+    it('should find first match', () => {
+      const stacks = [
+        [0, 1, 2],
+        [3, 4]
+      ];
+      const groupPair = [ 3, 1 ];
+
+      expect(StackHelper.findStackWithMatch(stacks, groupPair)).toEqual(0);
+    });
+
+    it('should not find normal mismatch', () => {
+      const stacks = [
+        [0, 1, 2],
+        [3, 4]
+      ];
+      const groupPair = [ 5, 6 ];
+
+      expect(StackHelper.findStackWithMatch(stacks, groupPair)).toEqual(-1);
+    });
+  });
+  
+  describe('#createFinalStacks', () => {
+    it('should simplifiy groupPairs into unique stacks', () => {
+      const groupPairs = [
+        [0, 1],
+        [1, 2],
+        [3, 1],
+        [4, 5],
+        [5, 6],
+        [7, 3]
+      ];
+      const result = [
+        [7, 3, 1, 2, 0],
+        [5, 6, 4]
+      ];
+
+      expect(StackHelper.createFinalStacks(groupPairs)).toEqual(result);
+    });
+
+    it('should simplifiy groupPairs (with unexpected redundancy?) into unique stacks', () => {
+      const groupPairs = [
+        [0, 1],
+        [0, 1],
+        [1, 2],
+        [3, 1],
+        [4, 5],
+        [5, 6],
+        [7, 1],
+        [7, 3]
+      ];
+      const result = [
+        [7, 3, 1, 2, 0],
+        [5, 6, 4]
+      ];
+
+      expect(StackHelper.createFinalStacks(groupPairs)).toEqual(result);
+    });
+
+    it('should handle simple 2 item stacks', () => {
+      const groupPairs = [
+        [0, 1],
+        [1, 2],
+        [7, 2],
+        [11, 12]
+      ];
+      const result = [
+        [11, 12],
+        [7, 2, 1, 0]
+      ];
+
+      expect(StackHelper.createFinalStacks(groupPairs)).toEqual(result);
+    });
+
+    it('should be OK with no groupPairs', () => {
+      expect(StackHelper.createFinalStacks([])).toEqual([]);
+      expect(StackHelper.createFinalStacks(null)).toEqual([]);
+    });
+  });
+  
+  /* 2big2test */
+  describe.skip('#calcStacks', () => {
+  });
+  
+  /*
   describe.skip('#sample', () => {
     it('should do something', () => {
       expect(true).toBe(false);
     });
   });
+  */
 });

@@ -196,7 +196,7 @@ function Card({ data, theme='white' }) {
         stackColor={stackColor}
       >
         <S.Background src={data.info.imageUrl} draggable={false} />
-        <p>{data.info.title}</p>
+        <p>{`(${data.cardIdx}): ${data.info.title}`}</p>
         {data.stackIdx > -1 && (
           <S.StackFlag stackColor={stackColor}>
             <span>{stackSize}</span>
