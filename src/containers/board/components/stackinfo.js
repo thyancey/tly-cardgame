@@ -48,22 +48,104 @@ S.StackEntry = styled.div`
   }
 `;
 
-S.MetaEntry = styled.div`
-  border: 2px solid white;
-  border-radius: 1rem;
-  padding:.5rem;
+S.Header = styled.div`
+  min-height: 3rem;
 `;
 
-/*
-  [
-    {
-      tag: "suit",
-      count: 3,
-      score: 3000
-    }
-  ]
+S.Summary = styled.div`
 
-*/
+`;
+
+S.TotalScore = styled.div`
+  position:absolute;
+  top:.5rem;
+  right:1rem;
+
+  >span{
+    display:inline-block;
+    vertical-align:top;
+    /* total score: */
+    &:nth-child(1){
+      margin: .5rem;
+      color:white;
+    }
+    /* the score  */
+    &:nth-child(2){
+      font-size: 3rem;
+      color:${getColor('yellow')};
+    }
+  }
+`;
+
+S.SubScore = styled.div`
+  /* position:absolute; */
+  top:.5rem;
+  right:1rem;
+
+  >span{
+    display:inline-block;
+    vertical-align:top;
+    /* the score  */
+    &:nth-child(1){
+      font-size: 2rem;
+      color:${getColor('blue')};
+    }
+    /* total score: */
+    &:nth-child(2){
+      margin: .5rem;
+      color:white;
+    }
+  }
+`;
+
+S.MetaScore = styled.div`
+  text-align:right;
+  >span{
+    /* the x */
+    &:nth-child(1){
+      color:${getColor('red')};
+    }
+    /* the score  */
+    &:nth-child(2){
+      color:white;
+    }
+  }
+`;
+
+S.MetaEntry = styled.div`
+  position: relative;
+  /* border: 2px solid white; */
+  text-align:right;
+
+  >div{
+    display:inline-block;
+    vertical-align:top;
+    padding: .5rem 1rem;
+    background-color: ${getColor('grey')};
+
+    &:nth-child(1){
+      border-radius: 1rem 0 0 1rem;
+      margin-right:.12rem;
+    }
+    &:nth-child(2){
+      border-radius: 0rem 1rem 1rem 0rem;
+      margin-left:.12rem;
+    }
+  }
+`;
+
+S.MetaLeft = styled.div`
+  text-align:left;
+`;
+
+S.MetaRight = styled.div`
+  font-size:2rem;
+  text-align:right;
+  color:${getColor('yellow')};
+  background-color: ${getColor('grey')};
+  min-width: 7rem;
+  padding-right:.5rem;
+`;
 
 const newMetaGroup = metaInfo => ({
   tag: metaInfo.tag,
@@ -115,10 +197,16 @@ function MetaEntry({ tag, value, count, score }) {
 
   return (
     <S.MetaEntry>
-      <div>
+      <S.MetaLeft>
         <p>{`${tag}: ${value}`}</p>
-        <p>{`${count} x ${score} = ${count * score}`}</p>
-      </div>
+        <S.MetaScore>
+          <span>{'x '}</span>
+          <span>{score}</span>
+        </S.MetaScore>
+      </S.MetaLeft>
+      <S.MetaRight>
+        <span>{count * score}</span>
+      </S.MetaRight>
     </S.MetaEntry>
   );
 }
@@ -166,21 +254,40 @@ function StackInfo() {
   const totalScore = useMemo(() => {
     return completeStacks.reduce(((totalScore, curStack) => curStack.score + totalScore), 0);
   }, [ completeStacks ]);
+  
+  const ppcScore = useMemo(() => {
+    return (hand.length > 0 && totalScore / hand.length) || 0;
+  }, [ totalScore, hand.length ]);
 
   console.log('completeStacks', completeStacks)
 
   return (
     <S.Container >
-      <p>{'Stack Info'}</p>
-      <p>{`Total score:${totalScore}`}</p>
-      { completeStacks.map((stack, idx) => (
-        <StackEntry 
-          key={idx}
-          idx={idx}
-          count={stack.count}
-          score={stack.score}
-          meta={stack.meta} />
-      ))}
+      <S.Header>
+        <p>{'Stack Info'}</p>
+        <S.TotalScore>
+          <span>{'Total score: '}</span>
+          <span>{totalScore}</span>
+        </S.TotalScore>
+        <S.SubScore>
+          <span>{hand.length}</span>
+          <span>{'cards in play'}</span>
+        </S.SubScore>
+        <S.SubScore>
+          <span>{ppcScore}</span>
+          <span>{'score/card'}</span>
+        </S.SubScore>
+      </S.Header>
+      <S.Summary>
+        { completeStacks.map((stack, idx) => (
+          <StackEntry 
+            key={idx}
+            idx={idx}
+            count={stack.count}
+            score={stack.score}
+            meta={stack.meta} />
+        ))}
+      </S.Summary>
     </S.Container>
   );
 }

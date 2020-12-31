@@ -74,13 +74,20 @@ const VALUE_MAP = {
   ],
 };
 
+const SCORE_MAP = {
+  'label': 1000,
+  'color': 50,
+  'suit': 200,
+  'value': 800
+};
+
 const generateTraditionalDeckMeta = (value, suit) => {
   let allMeta = (SUIT_MAP[suit] || []).concat(VALUE_MAP[value] || []);
   return allMeta.map(m => ({
     tag: m[0],
     value: m[1],
     type: typeof m[1],
-    score: 100
+    score: SCORE_MAP[m[0]] || 0
   }));
 };
 
