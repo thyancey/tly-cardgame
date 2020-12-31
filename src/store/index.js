@@ -2,52 +2,15 @@ import React, { useState, useCallback } from 'react';
 import { StoreContext } from './context';
 import data from './data.json';
 import StackHelper from './helpers/stack';
+import DeckMaker from './helpers/deckmaker';
 
 let topLayer = 0;
-
-const getCardAtIdx = (cardData, cardIdx) => {
-  const card = cardData[cardIdx];
-  if(!card) return null;
-
-  return card;
-}
-
-const createTraditionalDeck = () => {
-  const prefixes = [ '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A' ];
-  const suits = [ 'H', 'D', 'C', 'S' ];
-
-  return suits.map(s => (
-    prefixes.map(p => (
-      {
-        title: `sample_${p}${s}`,
-        imageUrl: `./assets/cards/${p}${s}.jpg`
-      }
-    ))
-  )).flat()
-}
-
-const produceCard = (cardIdx, deck) => {
-  let randIdx = Math.floor(Math.random() * deck.length);
-  let newPos = {
-    x: Math.random() * 500,
-    y: Math.random() * 500
-  }
-
-  return {
-    cardIdx: cardIdx,
-    deckIdx: randIdx,
-    info: deck[randIdx],
-    status: null,
-    layer: topLayer++,
-    position: newPos
-  }
-}
 
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
   // const [ deck, setDeck ] = useState(data.cards);
-  const [ deck, setDeck ] = useState(createTraditionalDeck());
+  const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
 
@@ -65,6 +28,7 @@ function Store({children}) {
     setHand(hand.filter(h => h.cardIdx !== cardIdx));
   }, [ setHand, hand ]);
 
+  /* dragging a card around.. */
   const setCardPosition = useCallback((cardIdx, newPosition, didDrop) => {
     if(cardIdx === holdingIdx){
       setHoldingIdx(-1);
@@ -108,7 +72,7 @@ function Store({children}) {
 
     for(let i = 0; i < cardCount; i++){
       newHand.push(
-        produceCard(i, deck)
+        DeckMaker.produceCard(i, deck, topLayer)
       );
     }
   
@@ -121,7 +85,7 @@ function Store({children}) {
     
     for(let i = 0; i < cardCount; i++){
       newHand.push(
-        produceCard((i + startIdx), deck)
+        DeckMaker.produceCard((i + startIdx), deck)
       );
     }
 
@@ -186,7 +150,7 @@ function Store({children}) {
         stacks: stacks,
         setZone: setZone,
         setHoldingIdx: setHoldingIdx,
-        firstCard: () => getCardAtIdx(deck, 0),
+        firstCard: () => DeckMaker.getCardAtIdx(deck, 0),
         setCardPosition: setCardPosition,
         dealHand: dealHand,
         dealCard: dealCard,

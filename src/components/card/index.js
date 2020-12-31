@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { StoreContext } from '../store/context';
-import { mixin_textStroke, getShadow, getColor } from '../themes/index';
+import { StoreContext } from '../../store/context';
+import { mixin_textStroke, getShadow, getColor } from '../../themes/index';
+import MetaGroup from './metagroup';
 
 const S = {};
 
@@ -81,7 +82,7 @@ S.StackFlag = styled.div`
       ${ mixin_textStroke('.5px', '2px', getColor('black')) }
     }
   `}
-`
+`;
 
 function usePosition(restingPosition, dragPosition){
 
@@ -197,6 +198,7 @@ function Card({ data, theme='white' }) {
       >
         <S.Background src={data.info.imageUrl} draggable={false} />
         <p>{`(${data.cardIdx}): ${data.info.title}`}</p>
+        <MetaGroup data={data.info.meta} />
         {data.stackIdx > -1 && (
           <S.StackFlag stackColor={stackColor}>
             <span>{stackSize}</span>
