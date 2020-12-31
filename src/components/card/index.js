@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useRef, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { StoreContext } from '../../store/context';
 import { mixin_textStroke, getShadow, getColor } from '../../themes/index';
 import MetaGroup from './metagroup';
+import StackHelper from '../../store/helpers/stack';
 
 const S = {};
 
@@ -49,9 +50,7 @@ S.InnerCard = styled.div`
   
 
   ${p => p.stackColor && css`
-    ${'' /* border: 3px solid ${p.stackColor}; */}
     box-shadow: 0 0 2rem .5rem ${getColor(p.stackColor)};
-    ${'' /* color: ${p.stackColor}; */}
     text-shadow: 0 0 .5rem ${getColor(p.stackColor)};
     color:white;
   `}
@@ -178,7 +177,7 @@ function Card({ data, theme='white' }) {
 
   let position = usePosition(data.position, state.dragPosition, cardRef);
 
-  let stackColor = useStackColor(data.stackIdx);
+  let stackColor = useMemo(() => StackHelper.getStackColor(data.stackIdx), [ data.stackIdx ]);
 
   return (
     <S.Card 

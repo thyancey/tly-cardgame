@@ -4,6 +4,7 @@ import { StoreContext } from '../../store/context';
 import Card from '../../components/card';
 import { getColor } from '../../themes/index';
 import DropZone from './components/drop-zone';
+import StackInfo from './components/stackinfo';
 
 const S = {};
 
@@ -13,7 +14,6 @@ S.PlayArea = styled.div`
   height:100%;
   overflow:hidden;
 `;
-
 
 S.Board = styled.div`
   position:absolute;
@@ -62,6 +62,17 @@ S.InfoZone = styled.div`
   border: .2rem dashed black;
 `;
 
+S.StackInfo = styled.div`
+  position:fixed;
+  z-index:99999999;
+  bottom:0;
+  left:0;
+  width:50%;
+  max-height:50%;
+  overflow-y:auto;
+  background-color:black;
+`;
+
 function Board() {
   const { dealHand, dealCard, discardRandomCard, discardHand, hand } = useContext(StoreContext);
 
@@ -90,6 +101,9 @@ function Board() {
       <S.DiscardZone>
         <DropZone action={'discard'} />
       </S.DiscardZone>
+      <S.StackInfo>
+        <StackInfo />
+      </S.StackInfo>
 
       {hand.map((c, idx) => 
         <Card data={c} key={c.cardIdx} />

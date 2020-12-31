@@ -80,7 +80,7 @@ const generateTraditionalDeckMeta = (value, suit) => {
     tag: m[0],
     value: m[1],
     type: typeof m[1],
-    score: 1
+    score: 100
   }));
 };
 
@@ -112,7 +112,7 @@ const produceCard = (cardIdx, deck, topLayer) => {
     deckIdx: randIdx,
     info: deck[randIdx],
     status: null,
-    layer: topLayer++,
+    layer: topLayer,
     position: newPos
   }
 };

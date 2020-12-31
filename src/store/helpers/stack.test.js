@@ -170,7 +170,7 @@ describe('store.helpers.stack', () => {
     });
   });
   
-  describe('#createFinalStacks', () => {
+  describe('#createRawStacks', () => {
     it('should simplifiy groupPairs into unique stacks', () => {
       const groupPairs = [
         [0, 1],
@@ -185,7 +185,7 @@ describe('store.helpers.stack', () => {
         [5, 6, 4]
       ];
 
-      expect(StackHelper.createFinalStacks(groupPairs)).toEqual(result);
+      expect(StackHelper.createRawStacks(groupPairs)).toEqual(result);
     });
 
     it('should simplifiy groupPairs (with unexpected redundancy?) into unique stacks', () => {
@@ -204,7 +204,7 @@ describe('store.helpers.stack', () => {
         [5, 6, 4]
       ];
 
-      expect(StackHelper.createFinalStacks(groupPairs)).toEqual(result);
+      expect(StackHelper.createRawStacks(groupPairs)).toEqual(result);
     });
 
     it('should handle simple 2 item stacks', () => {
@@ -219,12 +219,12 @@ describe('store.helpers.stack', () => {
         [7, 2, 1, 0]
       ];
 
-      expect(StackHelper.createFinalStacks(groupPairs)).toEqual(result);
+      expect(StackHelper.createRawStacks(groupPairs)).toEqual(result);
     });
 
     it('should be OK with no groupPairs', () => {
-      expect(StackHelper.createFinalStacks([])).toEqual([]);
-      expect(StackHelper.createFinalStacks(null)).toEqual([]);
+      expect(StackHelper.createRawStacks([])).toEqual([]);
+      expect(StackHelper.createRawStacks(null)).toEqual([]);
     });
   });
   

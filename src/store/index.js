@@ -65,14 +65,13 @@ function Store({children}) {
 
   }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
 
-
   const dealHand = useCallback(cardCount => {
     let newHand = [];
     topLayer = 1;
 
     for(let i = 0; i < cardCount; i++){
       newHand.push(
-        DeckMaker.produceCard(i, deck, topLayer)
+        DeckMaker.produceCard(i, deck, topLayer++)
       );
     }
   
@@ -85,7 +84,7 @@ function Store({children}) {
     
     for(let i = 0; i < cardCount; i++){
       newHand.push(
-        DeckMaker.produceCard((i + startIdx), deck)
+        DeckMaker.produceCard((i + startIdx), deck, topLayer++)
       );
     }
 

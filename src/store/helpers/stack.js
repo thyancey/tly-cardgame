@@ -95,7 +95,7 @@ const mutateForGroupPairs = (stacks, groupPairs) => {
   };
 }
 
-const createFinalStacks = givenGroupPairs => {
+const createRawStacks = givenGroupPairs => {
   if(!givenGroupPairs || givenGroupPairs.length === 0) return [];
 
   let stacks = [];
@@ -119,7 +119,22 @@ const createFinalStacks = givenGroupPairs => {
 const calcStacks = (hand) => {
   const boundedHand = ThisModule.createBoundedHand(hand);
   const groupPairs = ThisModule.getGroupPairs(boundedHand);
-  return ThisModule.createFinalStacks(groupPairs);
+  const rawStacks = ThisModule.createRawStacks(groupPairs);
+  return rawStacks;
+};
+
+
+const getStackColor = (stackIdx) => {
+  switch(stackIdx){
+    case -1: return null;
+    case 0: return 'purple';
+    case 1: return 'blue';
+    case 2: return 'green';
+    case 3: return 'yellow';
+    case 4: return 'red';
+    case 5: return 'grey';
+    default: return 'black';
+  }
 };
 
 export default {
@@ -129,8 +144,9 @@ export default {
   createBoundedHand: createBoundedHand,
   doesOverlap: doesOverlap,
   getGroupPairs: getGroupPairs,
-  createFinalStacks: createFinalStacks,
+  createRawStacks: createRawStacks,
   findStackWithMatch: findStackWithMatch,
   calcStacks: calcStacks,
   mutateForGroupPairs: mutateForGroupPairs,
+  getStackColor: getStackColor,
 };

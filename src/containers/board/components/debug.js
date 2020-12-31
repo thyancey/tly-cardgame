@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import styled, {} from 'styled-components';
 import { StoreContext } from '../../../store/context';
 
@@ -36,11 +36,11 @@ function DebugBlock({ label, output }) {
 }
 
 function Debug() {
-  const { stacks } = useContext(StoreContext);
+  const { stacks, hand } = useContext(StoreContext);
 
   return (
     <S.Container >
-      <p>{'debug'}</p>
+      <p>{'stacks'}</p>
       { stacks.map((d, idx) => (
         <DebugBlock 
           key={idx}
