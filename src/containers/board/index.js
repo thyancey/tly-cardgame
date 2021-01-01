@@ -5,6 +5,7 @@ import Card from '../../components/card';
 import { getColor } from '../../themes/index';
 import DropZone from './components/drop-zone';
 import StackInfo from './components/stackinfo';
+import ScoreInfo from './components/scoreinfo';
 
 const S = {};
 
@@ -20,7 +21,7 @@ S.Board = styled.div`
   left:10%;
   top:10%;
   width:80%;
-  height:80%;
+  height:70%;
   text-align:center;
 
   display: grid;
@@ -67,8 +68,8 @@ S.StackInfo = styled.div`
   z-index:99999999;
   bottom:0;
   left:0;
-  width:50%;
-  max-height:50%;
+  width:100%;
+  max-height:20rem;
   overflow-y:auto;
   background-color:black;
 `;
@@ -97,6 +98,7 @@ function Board() {
       </S.DrawZone>
       <S.InfoZone>
         <p>{'info'}</p>
+        <ScoreInfo />
       </S.InfoZone>
       <S.DiscardZone>
         <DropZone action={'discard'} />

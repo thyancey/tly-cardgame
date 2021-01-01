@@ -137,6 +137,11 @@ const getStackColor = (stackIdx) => {
   }
 };
 
+const ALPHA = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L' ]
+const getStackLabel = stackIdx => {
+  return ALPHA[stackIdx] || '*';
+};
+
 export default {
   isThisInThat: isThisInThat,
   mergeArrays: mergeArrays,
@@ -149,4 +154,5 @@ export default {
   calcStacks: calcStacks,
   mutateForGroupPairs: mutateForGroupPairs,
   getStackColor: getStackColor,
+  getStackLabel: getStackLabel,
 };

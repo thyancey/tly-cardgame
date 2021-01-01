@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React from 'react';
 import styled, { } from 'styled-components';
 import { StoreContext } from '../../../store/context';
 
@@ -28,34 +28,41 @@ S.BasicButton = styled.button`
 S.Zone = styled.div`
 `;
 
+/* 
+  TODO, tried this with hooks but couldnt get it to stop doing an infinite re-render with refs and useEffect
+*/
+class DropZone extends React.Component{
+  static contextType = StoreContext;
 
-function DropZone() {
-  const { setZone } = useContext(StoreContext);
-  const zoneRef = useRef(null);
-  // let registeredZone = false;
+  constructor(props) {
+    super(props)
+    this.zoneRef = React.createRef();
+    this.onWindowResize = this.onWindowResize.bind(this);
+  }
 
-  const [ state, setState ] = useState({
-    registeredZone: null
-  });
+  componentDidMount(){
+    window.addEventListener('resize', this.onWindowResize);
+  }
 
-  useEffect(() => {
-    if(!state.registeredZone){
-      // console.log(zoneRef.current.getBoundingClientRect());
-      setZone('discard', zoneRef.current.getBoundingClientRect());
-      setState({registeredZone: true});
-    }
-  }, [ setZone, zoneRef, state.registeredZone ]);
+  componentWillUnmount(){
+    window.removeEventListener('resize', this.onWindowResize);
+  }
 
+  onWindowResize(){
+    this.context.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
+  }
 
-  return (
+  render() {
+    return (
     <S.Container 
-    ref={zoneRef} >
-      <S.Zone >
+      ref={this.zoneRef} >
+        <S.Zone >
 
-      </S.Zone>
-      {'discard zone'}
-    </S.Container>
-  );
+        </S.Zone>
+        {'discard zone'}
+      </S.Container>
+    )
+  };
 }
 
 export default DropZone;

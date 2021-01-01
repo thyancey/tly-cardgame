@@ -98,28 +98,6 @@ function usePosition(restingPosition, dragPosition){
   }
 }
 
-function useStackColor(stackIdx) {
-  switch(stackIdx){
-    case -1: return null;
-    case 0: return 'purple';
-    case 1: return 'blue';
-    case 2: return 'green';
-    case 3: return 'yellow';
-    case 4: return 'red';
-    case 5: return 'grey';
-    default: return 'black';
-  }
-}
-
-function useStackSize(stackIdx, stacks){
-  try{
-    return stacks[stackIdx].length;
-  }catch(e){
-    // console.error('could not find stack at idx ', stackIdx, stacks);
-    return 0;
-  }
-}
-
 function Card({ data, theme='white' }) {
   const { setCardPosition, setHoldingIdx, stacks } = useContext(StoreContext);
 
@@ -127,7 +105,6 @@ function Card({ data, theme='white' }) {
     dragPosition: null
   });
 
-  const stackSize = useStackSize(data.stackIdx, stacks);
   const cardRef = useRef(null);
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
@@ -176,7 +153,6 @@ function Card({ data, theme='white' }) {
   }, [ state.dragPosition, onMouseMove, onMouseUp ])
 
   let position = usePosition(data.position, state.dragPosition, cardRef);
-
   let stackColor = useMemo(() => StackHelper.getStackColor(data.stackIdx), [ data.stackIdx ]);
 
   return (
@@ -200,7 +176,7 @@ function Card({ data, theme='white' }) {
         <MetaGroup data={data.info.meta} />
         {data.stackIdx > -1 && (
           <S.StackFlag stackColor={stackColor}>
-            <span>{stackSize}</span>
+            <span>{StackHelper.getStackLabel(data.stackIdx)}</span>
           </S.StackFlag>
         )}
       </S.InnerCard>

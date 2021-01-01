@@ -2,17 +2,25 @@ import React, { useContext, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { StoreContext } from '../../../store/context';
 import StackHelper from '../../../store/helpers/stack';
+import MetaHelper from '../../../store/helpers/meta';
 import { getColor } from '../../../themes/index';
 
 const S = {};
 
 S.Container = styled.div`
   padding:1rem;
+  padding-top:.5rem;
 
   color:white;
   border: 2px solid white;
   font-size:1rem;
   text-align:left;
+`;
+
+S.Header = styled.div`
+`;
+
+S.Summary = styled.div`
 `;
 
 S.StackEntry = styled.div`
@@ -44,56 +52,6 @@ S.StackEntry = styled.div`
 
     li{
       margin-top:.5rem;
-    }
-  }
-`;
-
-S.Header = styled.div`
-  min-height: 3rem;
-`;
-
-S.Summary = styled.div`
-
-`;
-
-S.TotalScore = styled.div`
-  position:absolute;
-  top:.5rem;
-  right:1rem;
-
-  >span{
-    display:inline-block;
-    vertical-align:top;
-    /* total score: */
-    &:nth-child(1){
-      margin: .5rem;
-      color:white;
-    }
-    /* the score  */
-    &:nth-child(2){
-      font-size: 3rem;
-      color:${getColor('yellow')};
-    }
-  }
-`;
-
-S.SubScore = styled.div`
-  /* position:absolute; */
-  top:.5rem;
-  right:1rem;
-
-  >span{
-    display:inline-block;
-    vertical-align:top;
-    /* the score  */
-    &:nth-child(1){
-      font-size: 2rem;
-      color:${getColor('blue')};
-    }
-    /* total score: */
-    &:nth-child(2){
-      margin: .5rem;
-      color:white;
     }
   }
 `;
@@ -147,52 +105,6 @@ S.MetaRight = styled.div`
   padding-right:.5rem;
 `;
 
-const newMetaGroup = metaInfo => ({
-  tag: metaInfo.tag,
-  value: metaInfo.value,
-  score: metaInfo.score,
-  count: 1
-});
-
-const mergeMetaGroup = (oldMeta, newMeta) => ({
-  ...oldMeta,
-  count: oldMeta.count + 1
-});
-
-const produceCards = (cardIdxs, hand) => cardIdxs.map((cardIdx) => hand.find(h => h.cardIdx === cardIdx));
-
-const calcStackMeta = ( cardIdxs, hand ) => {
-  const cards = produceCards(cardIdxs, hand);
-
-  let stackMeta = [];
-  let invalidatedTags = [];
-  cards.forEach(c => {
-    c.info.meta.forEach(cMeta => {
-      const foundIdx = stackMeta.findIndex(m => m.tag === cMeta.tag);
-      if(foundIdx > -1){
-        /* for now, tag/value combos must match for card to aggregate..
-           if "color":"red", dont wanna aggregate any new meta where "color":"blue", etc
-        */
-        if(stackMeta[foundIdx].value === cMeta.value){
-          stackMeta[foundIdx] = mergeMetaGroup(stackMeta[foundIdx], cMeta);
-        }else{
-          //- tag/value combo doesnt match for this card
-          //- maybe later, invalidate tag group
-          if(invalidatedTags.indexOf(cMeta.tag) === -1) invalidatedTags.push(cMeta.tag);
-        }
-      }else{
-        stackMeta.push(newMetaGroup(cMeta));
-      }
-    })
-  });
-
-  return stackMeta
-    .filter(sM => !foundInTags(sM.tag, invalidatedTags)) //- remove any invalid groups
-    .filter(sM => sM.count > 1); //- remove any single counts (TODO, bonus cards later)
-}
-
-const foundInTags = (checkTag, tags) => tags.some(t => t === checkTag);
-
 function MetaEntry({ tag, value, count, score }) {
 
   return (
@@ -212,11 +124,11 @@ function MetaEntry({ tag, value, count, score }) {
 }
 
 
-function StackEntry({ idx, count, score, meta }) {
+function StackEntry({ label, idx, count, score, meta }) {
 
   return (
     <S.StackEntry stackColor={useMemo(() => StackHelper.getStackColor(idx), [ idx ])} >
-      <h4>{`stack #${idx}`}</h4>
+      <h4>{`stack #${label}`}</h4>
       <p>{`cards: ${count}`}</p>
       <p>{`score: ${score}`}</p>
       <ul>
@@ -237,52 +149,23 @@ function StackEntry({ idx, count, score, meta }) {
 
 function StackInfo() {
   const { stacks, hand } = useContext(StoreContext);
-
-  const completeStacks = useMemo(() => {
-    return stacks.map((s, sIdx) => {
-      const stackMeta = calcStackMeta(s, hand);
-      return {
-        idx: sIdx,
-        cardIdxs: s,
-        count: s.length,
-        meta: stackMeta,
-        score: stackMeta.reduce(((totalScore, meta) => totalScore + (meta.count * meta.score)), 0)
-      }
-    });
-  }, [ stacks, hand ]);
-
-  const totalScore = useMemo(() => {
-    return completeStacks.reduce(((totalScore, curStack) => curStack.score + totalScore), 0);
-  }, [ completeStacks ]);
-  
-  const ppcScore = useMemo(() => {
-    return (hand.length > 0 && totalScore / hand.length) || 0;
-  }, [ totalScore, hand.length ]);
-
-  console.log('completeStacks', completeStacks)
+ 
+  const completeStacks = useMemo(() => 
+    MetaHelper.calcCompleteStacks(stacks, hand),
+    [ stacks, hand ]
+  );
 
   return (
     <S.Container >
       <S.Header>
-        <p>{'Stack Info'}</p>
-        <S.TotalScore>
-          <span>{'Total score: '}</span>
-          <span>{totalScore}</span>
-        </S.TotalScore>
-        <S.SubScore>
-          <span>{hand.length}</span>
-          <span>{'cards in play'}</span>
-        </S.SubScore>
-        <S.SubScore>
-          <span>{ppcScore}</span>
-          <span>{'score/card'}</span>
-        </S.SubScore>
+        <h2>{'Stack Info'}</h2>
       </S.Header>
       <S.Summary>
         { completeStacks.map((stack, idx) => (
           <StackEntry 
             key={idx}
             idx={idx}
+            label={ StackHelper.getStackLabel(idx) }
             count={stack.count}
             score={stack.score}
             meta={stack.meta} />

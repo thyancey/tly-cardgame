@@ -1,4 +1,5 @@
 import ThisModule from './deckmaker';
+import Stack from './stack';
 
 const SUIT_MAP = {
   'H': [
@@ -95,20 +96,33 @@ const createTraditionalDeck = () => {
   const prefixes = [ '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A' ];
   const suits = [ 'H', 'D', 'C', 'S' ];
 
+  let deckIdx = 0;
+
   return suits.map(s => (
     prefixes.map(p => (
       {
         title: `sample_${p}${s}`,
         imageUrl: `./assets/cards/${p}${s}.jpg`,
-        meta: generateTraditionalDeckMeta(p, s)
+        meta: generateTraditionalDeckMeta(p, s),
+        deckIdx: deckIdx++
       }
     ))
   )).flat()
 };
 
 /* some mutation going on here needs to get fixed */
-const produceCard = (cardIdx, deck, topLayer) => {
-  let randIdx = Math.floor(Math.random() * deck.length);
+/* supports producing multiple cards outside of state, kinda sloppy */
+const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
+  let filteredDeck = deck.filter((dC,idx) => {
+    const inHand = hand.find(hC => hC.deckIdx === dC.deckIdx) || workOrder.indexOf(dC.deckIdx) > -1;
+    return !inHand;
+  });
+  if(!filteredDeck || filteredDeck.length === 0){
+    return null;
+  }
+
+  let randIdx = Math.floor(Math.random() * filteredDeck.length);
+  let deckCard = filteredDeck[randIdx];
   let newPos = {
     x: Math.random() * 500,
     y: Math.random() * 500
@@ -116,8 +130,8 @@ const produceCard = (cardIdx, deck, topLayer) => {
 
   return {
     cardIdx: cardIdx,
-    deckIdx: randIdx,
-    info: deck[randIdx],
+    deckIdx: deckCard.deckIdx,
+    info: deckCard,
     status: null,
     layer: topLayer,
     position: newPos

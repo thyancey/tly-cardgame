@@ -70,22 +70,25 @@ function Store({children}) {
     topLayer = 1;
 
     for(let i = 0; i < cardCount; i++){
-      newHand.push(
-        DeckMaker.produceCard(i, deck, topLayer++)
-      );
+      let newCard = DeckMaker.produceCard(i, deck, [], [], topLayer++);
+      newCard && newHand.push(newCard);
     }
   
     setHand(newHand);
   }, [ setHand, deck ]);
 
+  /* dealing more than 1 is not working as expected */
   const dealCard = useCallback(cardCount => {
     let newHand = [];
     let startIdx = hand.length;
     
+    let workOrder = [];
     for(let i = 0; i < cardCount; i++){
-      newHand.push(
-        DeckMaker.produceCard((i + startIdx), deck, topLayer++)
-      );
+      let newCard = DeckMaker.produceCard((i + startIdx), deck, hand, workOrder, topLayer++);
+      if(newCard){
+        workOrder.push(newCard.deckIdx);
+      }
+      newCard && newHand.push(newCard);
     }
 
     setHand(hand.concat(newHand));
@@ -103,7 +106,6 @@ function Store({children}) {
       discardCard(hand[randHandIdx].cardIdx);
     }
   }, [ discardCard, hand ]);
-  
   
   /* this zone junk needs some work */
   const setZone = useCallback((zoneId, bounds) => {
