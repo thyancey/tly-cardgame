@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
 import Card from '../../components/card';
 import { getColor } from '../../themes/index';
+import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
 import StackInfo from './components/stackinfo';
 import ScoreInfo from './components/scoreinfo';
@@ -18,83 +19,54 @@ S.PlayArea = styled.div`
 
 S.Board = styled.div`
   position:absolute;
-  left:10%;
-  top:10%;
-  width:80%;
-  height:70%;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
   text-align:center;
-
-  display: grid;
-  grid-template-columns: auto 10rem;
-  grid-template-rows: 20rem auto 10rem 2rem;
-  grid-template-areas: 
-    'g-playarea g-draw'
-    'g-playarea g-info'
-    'g-playarea g-discard'
-    'g-footer g-discard';
-
-  border:.2rem solid black;
-  background-color:${getColor('grey')};
-`;
-
-S.BasicButton = styled.button`
-  padding: .5rem 1.5rem;
-  font-size: 1rem;
+  z-index:2;
 `;
 
 S.DrawZone = styled.div`
-  grid-area: g-draw;
-  border: .2rem dashed black;
-  position:relative;
-`;
-
-S.DiscardZone = styled.div`
-  grid-area: g-discard;
-  border: .2rem dashed black;
-`;
-
-S.FooterZone = styled.div`
-  grid-area: g-footer;
-  border: .2rem dashed black;
+  position:absolute;
+  z-index:99999999;
+  top:1rem;
+  left:1rem;
 `;
 
 S.InfoZone = styled.div`
-  grid-area: g-info;
-  border: .2rem dashed black;
+  position:absolute;
+  z-index:99999999;
+  top:-12rem;
+  right:-10rem;
+  width: 30rem;
+  height: 30rem;
 `;
 
-S.StackInfo = styled.div`
-  position:fixed;
+S.StackInfoZone = styled.div`
+  position:absolute;
   z-index:99999999;
-  bottom:0;
-  left:0;
-  width:100%;
-  max-height:20rem;
-  overflow-y:auto;
-  background-color:black;
+  bottom: -25rem;
+  right:-10rem;
+  width: 60rem;
+  height: 60rem;
+`;
+
+S.DiscardZone = styled.div`
+  position:absolute;
+  bottom:-10rem;
+  left:-4rem;
+  width: 274px;
+  height: 274px;
 `;
 
 function Board() {
-  const { dealHand, dealCard, discardRandomCard, discardHand, hand } = useContext(StoreContext);
+  const { hand } = useContext(StoreContext);
 
   return (
     <S.Board>
       <S.DrawZone>
-        <S.BasicButton onClick={() => dealHand(10)}>
-          {'deal only 10'}
-        </S.BasicButton>
-        <S.BasicButton onClick={() => dealCard(10)}>
-          {'deal 10 more'}
-        </S.BasicButton>
-        <S.BasicButton onClick={() => dealCard(1)}>
-          {'deal one'}
-        </S.BasicButton>
-        <S.BasicButton onClick={() => discardRandomCard()}>
-          {'discard random'}
-        </S.BasicButton>
-        <S.BasicButton onClick={() => discardHand()}>
-          {'discard hand'}
-        </S.BasicButton>
+        <DrawZone />
       </S.DrawZone>
       <S.InfoZone>
         <p>{'info'}</p>
@@ -103,18 +75,13 @@ function Board() {
       <S.DiscardZone>
         <DropZone action={'discard'} />
       </S.DiscardZone>
-      <S.StackInfo>
+      <S.StackInfoZone>
         <StackInfo />
-      </S.StackInfo>
+      </S.StackInfoZone>
 
       {hand.map((c, idx) => 
         <Card data={c} key={c.cardIdx} />
       )}
-
-      <S.FooterZone>
-        <p>{'some info text here'}</p>
-      </S.FooterZone>
-      
     </S.Board>
   );
 }

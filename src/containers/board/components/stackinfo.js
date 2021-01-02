@@ -8,13 +8,44 @@ import { getColor } from '../../../themes/index';
 const S = {};
 
 S.Container = styled.div`
-  padding:1rem;
-  padding-top:.5rem;
+  width: 100%;
+  height: 100%;
+`;
 
-  color:white;
-  border: 2px solid white;
-  font-size:1rem;
-  text-align:left;
+S.Bg = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index:-1;
+`;
+S.BgShape = styled.div`
+  position:absolute;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  border: 2rem solid ${getColor('white')};
+  background-color:${getColor('blue')};
+  border-radius: 50%;
+
+  &:hover{
+    box-shadow: 0 0 1rem .2rem ${getColor('white')};
+  }
+`;
+
+
+S.BgText = styled.img`
+  position:absolute;
+  left:4rem;
+  top:4rem;
+  right:0;
+  bottom:0;
+  width: 324px;
+  height: 242px;
+  z-index:1;
+  pointer-events:none;
 `;
 
 S.Header = styled.div`
@@ -157,9 +188,6 @@ function StackInfo() {
 
   return (
     <S.Container >
-      <S.Header>
-        <h2>{'Stack Info'}</h2>
-      </S.Header>
       <S.Summary>
         { completeStacks.map((stack, idx) => (
           <StackEntry 
@@ -171,6 +199,10 @@ function StackInfo() {
             meta={stack.meta} />
         ))}
       </S.Summary>
+      <S.Bg>
+        <S.BgText src={'./assets/bg/stack-details-text.png'}/>
+        <S.BgShape />
+      </S.Bg>
     </S.Container>
   );
 }

@@ -102,7 +102,7 @@ const createTraditionalDeck = () => {
     prefixes.map(p => (
       {
         title: `sample_${p}${s}`,
-        imageUrl: `./assets/cards/${p}${s}.jpg`,
+        imageUrl: `./assets/cards/sample/${p}${s}.jpg`,
         meta: generateTraditionalDeckMeta(p, s),
         deckIdx: deckIdx++
       }
@@ -110,6 +110,18 @@ const createTraditionalDeck = () => {
   )).flat()
 };
 
+const getRandomPosition = () => {
+  const wClamp = 200;
+  const hClamp = 150;
+
+  const w = window.innerWidth - (wClamp * 2);
+  const h = window.innerHeight - (hClamp * 2);
+
+  return {
+    x: wClamp + Math.floor(Math.random() * w),
+    y: hClamp + Math.floor(Math.random() * h),
+  }
+}
 /* some mutation going on here needs to get fixed */
 /* supports producing multiple cards outside of state, kinda sloppy */
 const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
@@ -123,10 +135,7 @@ const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
 
   let randIdx = Math.floor(Math.random() * filteredDeck.length);
   let deckCard = filteredDeck[randIdx];
-  let newPos = {
-    x: Math.random() * 500,
-    y: Math.random() * 500
-  }
+  let newPos = getRandomPosition();
 
   return {
     cardIdx: cardIdx,

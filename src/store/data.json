@@ -4,19 +4,19 @@
   "cards":[
     {
       "title": "sample_kingc",
-      "imageUrl": "./assets/cards/KC.jpg"
+      "imageUrl": "./assets/cards/sample/KC.jpg"
     },
     {
       "title": "sample_jokers",
-      "imageUrl": "./assets/cards/JS.jpg"
+      "imageUrl": "./assets/cards/sample/JS.jpg"
     },
     {
       "title": "sample_queenh",
-      "imageUrl": "./assets/cards/QH.jpg"
+      "imageUrl": "./assets/cards/sample/QH.jpg"
     },
     {
       "title": "sample_aced",
-      "imageUrl": "./assets/cards/AD.jpg"
+      "imageUrl": "./assets/cards/sample/AD.jpg"
     }
   ],
   "assets":[

@@ -10,14 +10,7 @@ S.Container = styled.div`
   position:absolute;
   width:100%;
   height:100%;
-  padding:1rem;
   overflow:hidden;
-
-  background-color:${getColor('black')};
-`;
-
-S.Header = styled.h1`
-  color:white;
 `;
 
 S.DebugContainer = styled.div`
@@ -29,14 +22,19 @@ S.DebugContainer = styled.div`
   overflow-y:auto;
 `;
 
+S.BoardBg = styled.img`
+  background-size: contain;
+  position: absolute;
+  width: 2000px;
+`;
+
+
 function Main() {
   return (
     <S.Container>
       <Store>
-        <S.Header>
-          {'Some dumb cardgame...'}
-        </S.Header>
         <Board />
+        <S.BoardBg src={'./assets/bg/bg1.jpg' } />
         <S.DebugContainer>
           <Debug/>
         </S.DebugContainer>

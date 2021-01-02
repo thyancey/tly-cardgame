@@ -1,23 +1,26 @@
 import React from 'react';
 import styled, { } from 'styled-components';
 import { StoreContext } from '../../../store/context';
+import { getColor } from '../../../themes';
 
 const S = {};
 
 S.Container = styled.div`
-  width:100%; 
-  height:100%;
-  padding:1rem;
-
-  color:white;
-  border: 2px solid white;
+  width: 100%;
+  height: 100%;
+  border: 2rem solid ${getColor('white')};
+  background-color:${getColor('purple')};
+  border-radius: 50%;
 
   &:hover{
-    color:yellow;
-    border-color:yellow;
-    border: 4px solid yellow;
-    box-shadow: 0 0 1rem .2rem yellow;
+    box-shadow: 0 0 1rem .2rem white;
   }
+`;
+
+S.ZoneText = styled.p`
+  margin-top:40%;
+  font-size:3rem;
+  color: white;
 `;
 
 S.BasicButton = styled.button`
@@ -54,12 +57,12 @@ class DropZone extends React.Component{
 
   render() {
     return (
-    <S.Container 
-      ref={this.zoneRef} >
+      <S.Container 
+        ref={this.zoneRef} >
         <S.Zone >
 
         </S.Zone>
-        {'discard zone'}
+        <S.ZoneText>{'DISCARD'}</S.ZoneText>
       </S.Container>
     )
   };

@@ -15,7 +15,7 @@ S.Card = styled.div`
   /* margin:7.5rem 5rem; */
   box-shadow: ${getShadow('z3')};
 
-  position:fixed;
+  position:absolute;
 
   z-index: ${p => p.depth};
   ${p => p.isDragging && css`

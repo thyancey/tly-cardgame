@@ -7,33 +7,62 @@ import { getColor } from '../../../themes/index';
 const S = {};
 
 S.Container = styled.div`
-  padding:1rem;
-
-  color:white;
-  border: 2px solid white;
+  padding-right:11rem;
+  padding-top:10rem;
   font-size:1rem;
 `;
 
+
+S.Bg = styled.div`
+  position:absolute;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  border: 2rem solid ${getColor('white')};
+  background-color:${getColor('blue')};
+  border-radius: 50%;
+  z-index:-1;
+
+  &:hover{
+    box-shadow: 0 0 1rem .2rem ${getColor('white')};
+  }
+`;
+
+
 S.ScoreGroup = styled.div`
   text-align:right;
-  >div{
-    margin-top:.5rem;
-    &:first-child{
-      margin-top:0;
-    }
-  }
 `;
 
 S.TotalScore = styled.div`
   >p{
     &:nth-child(1){
-      color:white;
+      font-size:2.5rem;
+      color:${getColor('white')};
+    }
+
+    /* the score  */
+    &:nth-child(2){
+      font-size: 5rem;
+      margin-top: -2.5rem;
+      margin-bottom: -1.5rem;
+      color:${getColor('ui_blue')};
+    }
+  }
+`;
+
+S.TargetScore = styled.div`
+  >p{
+    &:nth-child(1){
+      font-size:1.5rem;
+      color:${getColor('white')};
     }
 
     /* the score  */
     &:nth-child(2){
       font-size: 3rem;
-      color:${getColor('yellow')};
+      margin-top: -1.5rem;
+      color:${getColor('ui_orange')};
     }
   }
 `;
@@ -73,19 +102,15 @@ function StackInfo() {
     <S.Container >
       <S.ScoreGroup>
         <S.TotalScore>
-          <p>{'Total score'}</p>
+          <p>{'TOTAL'}</p>
           <p>{totalScore}</p>
         </S.TotalScore>
-        <hr/>
-        <S.SubScore>
-          <p>{'cards in play'}</p>
-          <p>{hand.length}</p>
-        </S.SubScore>
-        <S.SubScore>
-          <p>{'score/card'}</p>
-          <p>{ppcScore}</p>
-        </S.SubScore>
+        <S.TargetScore>
+          <p>{'TARGET'}</p>
+          <p>{totalScore}</p>
+        </S.TargetScore>
       </S.ScoreGroup>
+      <S.Bg/>
     </S.Container>
   );
 }
