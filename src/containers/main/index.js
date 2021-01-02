@@ -22,19 +22,11 @@ S.DebugContainer = styled.div`
   overflow-y:auto;
 `;
 
-S.BoardBg = styled.img`
-  background-size: contain;
-  position: absolute;
-  width: 2000px;
-`;
-
-
 function Main() {
   return (
     <S.Container>
       <Store>
         <Board />
-        <S.BoardBg src={'./assets/bg/bg1.jpg' } />
         <S.DebugContainer>
           <Debug/>
         </S.DebugContainer>

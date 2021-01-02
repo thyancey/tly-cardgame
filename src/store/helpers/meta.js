@@ -46,11 +46,14 @@ const calcStackMeta = ( cardIdxs, hand ) => {
 /* external */
 const calcCompleteStacks = (stacks, hand) => stacks.map((s, sIdx) => {
   const stackMeta = calcStackMeta(s, hand);
+
   return {
     idx: sIdx,
     cardIdxs: s,
+    cardDetails: s.map(cIdx => hand.find(c => c.cardIdx === cIdx).info),
     count: s.length,
     meta: stackMeta,
+    subScore: stackMeta.reduce(((totalScore, meta) => totalScore + meta.score), 0),
     score: stackMeta.reduce(((totalScore, meta) => totalScore + (meta.count * meta.score)), 0)
   }
 });

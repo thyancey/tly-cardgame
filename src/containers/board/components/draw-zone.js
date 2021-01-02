@@ -19,7 +19,6 @@ S.BasicButton = styled.div`
   background-color: ${getColor('purple')};
   border-radius: 1rem;
   width: 100%;
-  font-family: $font-roboto;
   font-weight: bold;
   cursor:pointer;
 

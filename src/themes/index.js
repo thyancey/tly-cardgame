@@ -12,6 +12,13 @@ export const themeGet = (...args) => props => {
   return current;
 };
 
+export const mixinFontFamily = (style) => {
+  switch(style){
+    case 'details' : return css`font-family: 'Roboto', sans-serif`;
+    case 'display': return css`font-family: 'Bevan', cursive`;
+    default: return css`font-family: 'Roboto', sans-serif`;
+  }
+}
 
 /* MIXINS */
 export const mixin_clearBubble = () => {
@@ -115,6 +122,7 @@ const store = {
     ui_blue: '#20F3FF',
     ui_orange: '#FD9410',
     ui_yellow: '#FDE010',
+    ui_green: '#10FD21',
   },
   shadow:{
     z1: '-0.1rem 0.1rem .25rem .1rem rgba(0,0,0,0.16)',

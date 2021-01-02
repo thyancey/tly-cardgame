@@ -10,12 +10,6 @@ import ScoreInfo from './components/scoreinfo';
 
 const S = {};
 
-S.PlayArea = styled.div`
-  position:relative;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-`;
 
 S.Board = styled.div`
   position:absolute;
@@ -25,6 +19,14 @@ S.Board = styled.div`
   bottom:0;
   text-align:center;
   z-index:2;
+
+`;
+
+S.PlayArea = styled.div`
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
 `;
 
 S.DrawZone = styled.div`
@@ -60,6 +62,24 @@ S.DiscardZone = styled.div`
   height: 274px;
 `;
 
+S.Bg = styled.div`
+  position: absolute;
+  top:0;
+  left:0;
+  background-color: ${getColor('purple')};
+  width:100%;
+  height:100%;
+  z-index:-1;
+`;
+
+S.BgImage = styled.img`
+  width: 2000px;
+  top:0;
+  left:0;
+
+  opacity:.5;
+`;
+
 function Board() {
   const { hand } = useContext(StoreContext);
 
@@ -82,6 +102,10 @@ function Board() {
       {hand.map((c, idx) => 
         <Card data={c} key={c.cardIdx} />
       )}
+      
+      <S.Bg>
+        <S.BgImage src={'./assets/bg/bg1.jpg' } />
+      </S.Bg>
     </S.Board>
   );
 }
