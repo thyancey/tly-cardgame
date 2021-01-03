@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext, useCallback, useRef, useMemo } 
 import styled, { css } from 'styled-components';
 import { StoreContext } from '../../store/context';
 import { mixin_textStroke, getShadow, getColor } from '../../themes/index';
-import MetaGroup from './metagroup';
-import StackHelper from '../../store/helpers/stack';
 
 const S = {};
 
@@ -12,9 +10,6 @@ S.Card = styled.div`
   border-radius:1rem;
   color:black;
 
-  /* margin:7.5rem 5rem; */
-  box-shadow: ${getShadow('z3')};
-
   position:absolute;
 
   z-index: ${p => p.depth};
@@ -22,14 +17,7 @@ S.Card = styled.div`
     z-index:1000;
   `}
 
-  p{
-    position:absolute;
-    top:100%;
-    width:100%;
-    text-align:center;
-    margin-top:.5rem;
-    font-weight:bold;
-  }
+  cursor:pointer;
 `;
 
 S.InnerCard = styled.div`
@@ -41,18 +29,19 @@ S.InnerCard = styled.div`
   top: -7.5rem;
   transition: transform .3s cubic-bezier(1,.05,.32,1.2), opacity .3s;
   border-radius: 1rem;
+  
+  box-shadow: ${getShadow('z3')};
+  ${p => p.stackStyle === 'stacked' && css`
+    box-shadow: 1px 3px 2px 4px ${getColor('ui_blue')};
+  `}
+  ${p => p.stackStyle === 'focused' && css`
+    box-shadow: 1px 3px 2px 4px ${getColor('ui_green')};
+  `}
 
   ${p => p.isDragging && css`
     transform: scaleX(1.5) scaleY(1.5);
     opacity: .5;
     transition: transform .1s cubic-bezier(.42,.05,.86,.13), opacity .2s;
-  `}
-  
-
-  ${p => p.stackColor && css`
-    box-shadow: 0 0 2rem .5rem ${getColor(p.stackColor)};
-    text-shadow: 0 0 .5rem ${getColor(p.stackColor)};
-    color:white;
   `}
 `;
 
@@ -60,27 +49,6 @@ S.Background = styled.img`
   background-size: contain;
   width:100%;
   border-radius:1rem;
-`;
-
-S.StackFlag = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width:3rem;
-  height:3rem;
-  padding-top:.5rem;
-
-  border-radius: 50%;
-
-  ${p => p.stackColor && css`
-    box-shadow: 0 0 .2rem .5rem ${getColor(p.stackColor)};
-    background-color: ${getColor(p.stackColor)};
-    transition: color, 1s;
-    span{
-      ${ mixin_textStroke('.5px', '2px', getColor('black')) }
-    }
-  `}
 `;
 
 function usePosition(restingPosition, dragPosition){
@@ -98,8 +66,8 @@ function usePosition(restingPosition, dragPosition){
   }
 }
 
-function Card({ data, theme='white' }) {
-  const { setCardPosition, setHoldingIdx, stacks, setFocusedStackIdx } = useContext(StoreContext);
+function SimpleCard({ data, theme='white' }) {
+  const { setCardPosition, setHoldingIdx, setFocusedStackIdx, focusedStackIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
     dragPosition: null
@@ -108,8 +76,8 @@ function Card({ data, theme='white' }) {
   const cardRef = useRef(null);
 
   
-  const onMouseOver = useCallback(({ clientX, clientY }, cardData) => {
-    setFocusedStackIdx(cardData.stackIdx);
+  const onMouseOver = useCallback((e, stackIdx) => {
+    setFocusedStackIdx(stackIdx);
   }, [ setFocusedStackIdx ]);
 
 
@@ -146,6 +114,7 @@ function Card({ data, theme='white' }) {
       x: clientX,
       y: clientY
     }, true);
+
   }, [ data.cardIdx, setCardPosition ]);
 
   useEffect(() => {
@@ -159,14 +128,28 @@ function Card({ data, theme='white' }) {
   }, [ state.dragPosition, onMouseMove, onMouseUp ])
 
   let position = usePosition(data.position, state.dragPosition, cardRef);
-  let stackColor = useMemo(() => StackHelper.getStackColor(data.stackIdx), [ data.stackIdx ]);
+
+  const stackStyle = useMemo(() => 
+    {
+      if(data.stackIdx === -1){
+        return null;
+      }else{
+        if(focusedStackIdx === data.stackIdx){
+          return 'focused';
+        }else{
+          return 'stacked';
+        }
+      }
+    },
+    [ data.stackIdx, focusedStackIdx ]
+  );
 
   return (
     <S.Card 
       theme={theme} 
       isDragging={!!state.dragPosition}
       onMouseDown={e => onMouseDown(e, data.cardIdx)}
-      onMouseOver={e => onMouseOver(e, data)}
+      onMouseOver={e => onMouseOver(e, data.stackIdx)}
       depth={data.layer}
       ref={cardRef}
       style={{
@@ -176,19 +159,12 @@ function Card({ data, theme='white' }) {
     >
       <S.InnerCard 
         isDragging={!!state.dragPosition}
-        stackColor={stackColor}
+        stackStyle={stackStyle}
       >
         <S.Background src={data.info.imageUrl} draggable={false} />
-        <p>{`(${data.cardIdx}): ${data.info.title}`}</p>
-        <MetaGroup data={data.info.meta} />
-        {data.stackIdx > -1 && (
-          <S.StackFlag stackColor={stackColor}>
-            <span>{StackHelper.getStackLabel(data.stackIdx)}</span>
-          </S.StackFlag>
-        )}
       </S.InnerCard>
     </S.Card>
   );
 }
 
-export default Card;
+export default SimpleCard;

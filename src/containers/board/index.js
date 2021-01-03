@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
-import Card from '../../components/card';
+import SimpleCard from '../../components/card/simple';
 import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
@@ -43,13 +43,14 @@ S.InfoZone = styled.div`
   right:-10rem;
   width: 30rem;
   height: 30rem;
+  pointer-events:none;
 `;
 
 S.StackInfoZone = styled.div`
   position:absolute;
-  z-index:99999999;
-  bottom: -25rem;
-  right:-10rem;
+  z-index:1;
+  bottom: -30rem;
+  right: -14rem;
   width: 60rem;
   height: 60rem;
 `;
@@ -66,7 +67,8 @@ S.Bg = styled.div`
   position: absolute;
   top:0;
   left:0;
-  background-color: ${getColor('purple')};
+  background-color: ${getColor('black')};
+  /* background-color: ${getColor('purple')}; */
   width:100%;
   height:100%;
   z-index:-1;
@@ -77,11 +79,14 @@ S.BgImage = styled.img`
   top:0;
   left:0;
 
-  opacity:.5;
+  /* opacity:.5; */
 `;
 
 function Board() {
-  const { hand } = useContext(StoreContext);
+  const { hand, setFocusedStackIdx } = useContext(StoreContext);
+  const onBgMouseOver = useCallback(() => {
+    setFocusedStackIdx(-1);
+  }, [ setFocusedStackIdx ]);
 
   return (
     <S.Board>
@@ -100,11 +105,12 @@ function Board() {
       </S.StackInfoZone>
 
       {hand.map((c, idx) => 
-        <Card data={c} key={c.cardIdx} />
+        <SimpleCard data={c} key={c.cardIdx} />
       )}
       
-      <S.Bg>
-        <S.BgImage src={'./assets/bg/bg1.jpg' } />
+      <S.Bg onMouseOver={onBgMouseOver}>
+        {/* <S.BgImage src={'./assets/bg/bg1.jpg' } /> */}
+        <S.BgImage src={'./assets/bg/space.jpg' } />
       </S.Bg>
     </S.Board>
   );

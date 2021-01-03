@@ -63,7 +63,6 @@ S.StackHolder = styled.div`
 S.StackEntry = styled.div`
   margin:.5rem;
   margin-bottom:4rem;
-  display:inline-block;
   border-radius: 1rem;
   padding: .5rem;
   padding-top: .25rem;
@@ -211,32 +210,20 @@ function MetaEntry({ tag, value, count, score }) {
         <span>{score}</span>
       </S.MetaScore>
       <S.MetaTag>
-        <span>{`${tag}: `}</span>
+        <span>{`${tag} : `}</span>
         <span>{value}</span>
       </S.MetaTag>
     </S.MetaEntry>
   );
 }
 
-function MetaSubTotal({ extra, label, value }) {
-  return (
-    <S.MetaEntry>
-      <S.MetaScoreSubTotal>
-        <span>{extra}</span>
-        <span>{value}</span>
-      </S.MetaScoreSubTotal>
-      <S.MetaRight>
-      </S.MetaRight>
-    </S.MetaEntry>
-  );
-}
 function MetaTotal({ subTotal, modifier, label, value }) {
   return (
     <S.MetaEntry>
       <S.MetaScoreModifier>
         <div>
           <span>{subTotal}</span>
-          <span>{`x${modifier} = `}</span>
+          <span>{`x ${modifier} = `}</span>
         </div>
       </S.MetaScoreModifier>
       <S.MetaScoreTotal>
@@ -302,26 +289,30 @@ function StackEntry({ label, idx, count, cards, score, subScore, meta }) {
 }
 
 function StackInfo() {
-  const { stacks, hand } = useContext(StoreContext);
+  const { stacks, hand, focusedStackIdx } = useContext(StoreContext);
   const completeStacks = useMemo(() => 
     MetaHelper.calcCompleteStacks(stacks, hand),
     [ stacks, hand ]
   );
 
+  const stack = useMemo(() => 
+    completeStacks.find(stack => stack.idx === focusedStackIdx),
+    [ completeStacks, focusedStackIdx ]
+  );
+
   return (
     <S.Container >
       <S.StackHolder>
-        { completeStacks.map((stack, idx) => (
+        {stack && (
           <StackEntry 
-            key={idx}
             cards={stack.cardDetails}
-            idx={idx}
-            label={ StackHelper.getStackLabel(idx) }
+            idx={stack.idx}
+            label={ StackHelper.getStackLabel(stack.idx) }
             count={stack.count}
             score={stack.score}
             subScore={stack.subScore}
             meta={stack.meta} />
-        ))}
+        )}
       </S.StackHolder>
       <S.Bg>
         <S.BgText src={'./assets/bg/stack-details-text.png'}/>

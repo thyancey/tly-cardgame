@@ -8,21 +8,27 @@ let topLayer = 0;
 
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
+  const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
   // const [ deck, setDeck ] = useState(data.cards);
   const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
 
-  const setHand = useCallback((hand) => {
+  const setHand = useCallback((hand, responsibleIdx) => {
     const stacks = StackHelper.calcStacks(hand);
     setStacks(stacks);
     
-    setHandRaw(hand.map(c => ({
+    const newHand = hand.map(c => ({
       ...c,
       stackIdx: stacks.findIndex(s => s.indexOf(c.cardIdx) > -1)
-    })));
-  }, [ setHandRaw, setStacks ]);
+    }));
+
+    setHandRaw(newHand);
+    if(responsibleIdx > -1){
+      setFocusedStackIdx(newHand.find(c => c.cardIdx === responsibleIdx).stackIdx);
+    }
+  }, [ setHandRaw, setStacks, setFocusedStackIdx ]);
 
   const discardCard = useCallback(cardIdx => {
     setHand(hand.filter(h => h.cardIdx !== cardIdx));
@@ -61,7 +67,7 @@ function Store({children}) {
       }
   
       return c;
-    }));
+    }), foundCard.cardIdx);
 
   }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
 
@@ -145,12 +151,14 @@ function Store({children}) {
     <StoreContext.Provider 
       value={{
         holdingIdx: holdingIdx,
+        focusedStackIdx: focusedStackIdx,
         hand: hand,
         deck: deck,
         zones: zones,
         stacks: stacks,
         setZone: setZone,
         setHoldingIdx: setHoldingIdx,
+        setFocusedStackIdx: setFocusedStackIdx,
         firstCard: () => DeckMaker.getCardAtIdx(deck, 0),
         setCardPosition: setCardPosition,
         dealHand: dealHand,

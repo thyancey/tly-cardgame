@@ -19,7 +19,7 @@ S.InnerCard = styled.div`
   left: -3rem;
   top: -4.5rem;
   transition: transform .3s cubic-bezier(1,.05,.32,1.2), opacity .3s;
-  border-radius: .5rem;
+  border-radius: 1rem;
 
   box-shadow: -1px -1px 5px 1px ${getColor('grey')};
 `;
