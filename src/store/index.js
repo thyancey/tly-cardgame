@@ -15,6 +15,9 @@ function Store({children}) {
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
   const [ dataLoaded, setDataLoaded ] = useState(false);
+  const [ level, setLevel ] = useState({
+    targetScore: 0
+  });
 
   const loadData = useCallback(deckName => {
     deckName = deckName || 'sample';
@@ -27,7 +30,8 @@ function Store({children}) {
       // console.log('loading data from ', dataUrl);
       DataHelper.loadData(dataUrl, (data) => {
         // console.log('heres your data', data);
-        setDeck(DeckMaker.createDeckFromData(deckName, data.deck.cards, data.deck.scoreMap))
+        setDeck(DeckMaker.createDeckFromData(deckName, data.deck.cards, data.deck.scoreMap));
+        setLevel(DeckMaker.getLevelData(data.deck));
         setDataLoaded(true);
       });
     }
@@ -168,6 +172,8 @@ function Store({children}) {
         zones: zones,
         stacks: stacks,
         dataLoaded: dataLoaded,
+        level: level,
+        setLevel: setLevel,
         setZone: setZone,
         loadData: loadData,
         setHoldingIdx: setHoldingIdx,

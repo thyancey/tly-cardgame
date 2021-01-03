@@ -82,7 +82,7 @@ S.SubScore = styled.div`
 `;
 
 function StackInfo() {
-  const { stacks, hand } = useContext(StoreContext);
+  const { stacks, hand, level } = useContext(StoreContext);
   const completeStacks = useMemo(() => 
     MetaHelper.calcCompleteStacks(stacks, hand),
     [ stacks, hand ]
@@ -107,7 +107,7 @@ function StackInfo() {
         </S.TotalScore>
         <S.TargetScore>
           <p>{'TARGET'}</p>
-          <p>{totalScore}</p>
+          <p>{level?.targetScore}</p>
         </S.TargetScore>
       </S.ScoreGroup>
       <S.Bg/>

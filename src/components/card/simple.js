@@ -48,6 +48,7 @@ S.InnerCard = styled.div`
 S.Background = styled.img`
   background-size: contain;
   width:100%;
+  height:100%;
   border-radius:1rem;
 `;
 
