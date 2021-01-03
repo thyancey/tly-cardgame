@@ -154,6 +154,12 @@ S.StackMeta = styled.ul`
   padding:0;
 `;
 
+S.NoMeta = styled.li`
+  span{
+
+  }
+`;
+
 S.MetaLine = styled.li`
   >div{
     display:inline-block;
@@ -231,9 +237,15 @@ function StackEntry({ label, idx, count, cards, score, subScore, meta }) {
             { makeLittleCards(cards) }
           </S.StackPreviewCenterer>
         </S.StackPreview>
-        <S.StackMeta>
-          {meta.map((m, i) => <MetaLine key={i} data={m} />)}
-        </S.StackMeta>
+        {meta.length > 0 ? (
+          <S.StackMeta>
+            {meta.map((m, i) => <MetaLine key={i} data={m} />)}
+          </S.StackMeta>
+        ):(
+          <S.StackMeta>
+            <S.NoMeta><span>{'no matching tags'}</span></S.NoMeta>
+          </S.StackMeta>
+        )}
         <S.StackEntryDivider/>
       </S.StackEntryBody>
       <S.StackEntryFooter>

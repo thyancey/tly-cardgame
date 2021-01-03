@@ -43,6 +43,15 @@ const calcStackMeta = ( cardIdxs, hand ) => {
     .filter(sM => sM.count > 1); //- remove any single counts (TODO, bonus cards later)
 }
 
+const getSortedCardDetails = (cardStack, hand) => 
+  cardStack.map(cIdx => {
+    const cdata = hand.find(c => c.cardIdx === cIdx);
+    return {
+      ...cdata.info,
+      layer: cdata.layer
+    }
+  }).sort((a,b) => (a.layer > b.layer) ? 1 : -1);
+
 /* external */
 const calcCompleteStacks = (stacks, hand) => stacks.map((s, sIdx) => {
   const stackMeta = calcStackMeta(s, hand);
@@ -50,7 +59,7 @@ const calcCompleteStacks = (stacks, hand) => stacks.map((s, sIdx) => {
   return {
     idx: sIdx,
     cardIdxs: s,
-    cardDetails: s.map(cIdx => hand.find(c => c.cardIdx === cIdx).info),
+    cardDetails: getSortedCardDetails(s, hand),
     count: s.length,
     meta: stackMeta,
     subScore: stackMeta.reduce(((totalScore, meta) => totalScore + meta.score), 0),

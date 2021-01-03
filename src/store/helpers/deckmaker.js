@@ -110,7 +110,17 @@ const createTraditionalDeck = () => {
   )).flat()
 };
 
-const getRandomPosition = () => {
+/* too lazy to make the cards stack in a pile right now */
+let shifter = 0;
+const getInitialPlacement = () => {
+  shifter += 2;
+  return {
+    x: 250 + shifter,
+    y: 100 + shifter
+  }
+}
+
+const getRandomPositionOnStage = () => {
   const wClamp = 200;
   const hClamp = 150;
 
@@ -122,6 +132,7 @@ const getRandomPosition = () => {
     y: hClamp + Math.floor(Math.random() * h),
   }
 }
+
 /* some mutation going on here needs to get fixed */
 /* supports producing multiple cards outside of state, kinda sloppy */
 const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
@@ -135,7 +146,7 @@ const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
 
   let randIdx = Math.floor(Math.random() * filteredDeck.length);
   let deckCard = filteredDeck[randIdx];
-  let newPos = getRandomPosition();
+  let newPos = getInitialPlacement();
 
   return {
     cardIdx: cardIdx,

@@ -19,7 +19,6 @@ S.Board = styled.div`
   bottom:0;
   text-align:center;
   z-index:2;
-
 `;
 
 S.PlayArea = styled.div`
@@ -68,7 +67,6 @@ S.Bg = styled.div`
   top:0;
   left:0;
   background-color: ${getColor('black')};
-  /* background-color: ${getColor('purple')}; */
   width:100%;
   height:100%;
   z-index:-1;
@@ -78,14 +76,14 @@ S.BgImage = styled.img`
   width: 2000px;
   top:0;
   left:0;
-
-  /* opacity:.5; */
 `;
 
 function Board() {
   const { hand, setFocusedStackIdx } = useContext(StoreContext);
+
+  /* unhovering stack makes the highlight go away */
   const onBgMouseOver = useCallback(() => {
-    // setFocusedStackIdx(-1);
+    setFocusedStackIdx(-1);
   }, [ setFocusedStackIdx ]);
 
   return (
