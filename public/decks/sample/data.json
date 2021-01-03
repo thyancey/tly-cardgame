@@ -1,0 +1,72 @@
+{
+  "config":{
+  },
+  "deck":{
+    "scoreMap":{
+      "label": 2000,
+      "color": 50,
+      "suit": 200,
+      "value": 800,
+      "royalty": 200,
+      "sex": 500
+    },
+    "cards":[
+      {
+        "title": "sample_kingc",
+        "imageUrl": "./assets/cards/sample/KC.jpg",
+        "meta":[
+          [ "value", 13 ],
+          [ "label", "king" ],
+          [ "suit", "clubs" ],
+          [ "color", "black" ],
+          [ "royalty", "true" ],
+          [ "sex", "male" ]
+        ]
+      },
+      {
+        "title": "sample_jacks",
+        "asset": "JS.jpg",
+        "meta":[
+          [ "value", 11 ],
+          [ "label", "jack" ],
+          [ "suit", "spades" ],
+          [ "color", "black" ],
+          [ "royalty", "true" ],
+          [ "sex", "male" ]
+        ]
+      },
+      {
+        "title": "sample_queenh",
+        "asset": "QH.jpg",
+        "meta":[
+          [ "value", 12 ],
+          [ "label", "queen" ],
+          [ "suit", "hearts" ],
+          [ "color", "red" ],
+          [ "royalty", "true" ],
+          [ "sex", "female" ]
+        ]
+      },
+      {
+        "title": "sample_aced",
+        "asset": "AD.jpg",
+        "meta":[
+          [ "value", 14 ],
+          [ "label", "ace" ],
+          [ "suit", "diamonds" ],
+          [ "color", "red" ]
+        ]
+      },
+      {
+        "title": "sample_aceh",
+        "asset": "AH.jpg",
+        "meta":[
+          [ "value", 14 ],
+          [ "label", "ace" ],
+          [ "suit", "hearts" ],
+          [ "color", "red" ]
+        ]
+      }
+    ]
+  }
+}

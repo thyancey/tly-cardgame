@@ -104,11 +104,21 @@ const parseMeta = (metaArray, scoreMap) => {
   }));
 }
 
-const createDeckFromData = (deckList, scoreMap) => {
+const getCompleteCardUrl = (c, deckPath) => {
+  if(c.asset){
+    return `${deckPath}/assets/${c.asset}`;
+  }else if(c.imageUrl){
+    return c.imageUrl;
+  }else{
+    return './assets/cards/sample.jpg';
+  }
+}
+
+const createDeckFromData = (deckName, deckList, scoreMap) => {
   let deckIdx = 0;
   return deckList.map(c => ({
     title: c.title || 'no title',
-    imageUrl: c.imageUrl || `./assets/cards/sample.jpg`,
+    imageUrl: ThisModule.getCompleteCardUrl(c, `./decks/${deckName}`),
     meta: ThisModule.parseMeta(c.meta, scoreMap),
     deckIdx: deckIdx++
   })).flat()
@@ -237,5 +247,6 @@ export default {
   produceCard: produceCard,
   getCardAtIdx: getCardAtIdx,
   filterDeckToWhatsLeft: filterDeckToWhatsLeft,
-  produceHand: produceHand
+  produceHand: produceHand,
+  getCompleteCardUrl: getCompleteCardUrl
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
 import SimpleCard from '../../components/card/simple';
@@ -79,12 +79,27 @@ S.BgImage = styled.img`
 `;
 
 function Board() {
-  const { hand, setFocusedStackIdx } = useContext(StoreContext);
+  const { hand, setFocusedStackIdx, dataLoaded, loadData } = useContext(StoreContext);
 
   /* unhovering stack makes the highlight go away */
   const onBgMouseOver = useCallback(() => {
     setFocusedStackIdx(-1);
   }, [ setFocusedStackIdx ]);
+
+  useEffect(() => {
+    console.log("only once please")
+    const urlParams = new URLSearchParams(window.location.search);
+    const deckUrl = urlParams.get('deck');
+    if(deckUrl){
+      loadData(deckUrl);
+    }else{
+      loadData();
+    }
+  }, [ loadData ]);
+
+  if(!dataLoaded){
+    return <h1>{'Loading...'}</h1>
+  }
 
   return (
     <S.Board>

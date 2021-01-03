@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { StoreContext } from './context';
-import data from './data.json';
 import StackHelper from './helpers/stack';
 import DeckMaker from './helpers/deckmaker';
+import DataHelper from './helpers/data';
 
 let topLayer = 0;
 
@@ -10,10 +10,28 @@ function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
-  const [ deck, setDeck ] = useState(DeckMaker.createDeckFromData(data.decks.sample1.cards, data.decks.sample1.scoreMap));
+  const [ deck, setDeck ] = useState([]);
   // const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
+  const [ dataLoaded, setDataLoaded ] = useState(false);
+
+  const loadData = useCallback(deckName => {
+    deckName = deckName || 'sample';
+
+    if(deckName === 'traditional'){
+      setDeck(DeckMaker.createTraditionalDeck());
+      setDataLoaded(true);
+    }else{
+      const dataUrl = `./decks/${deckName}/data.json`;
+      // console.log('loading data from ', dataUrl);
+      DataHelper.loadData(dataUrl, (data) => {
+        // console.log('heres your data', data);
+        setDeck(DeckMaker.createDeckFromData(deckName, data.deck.cards, data.deck.scoreMap))
+        setDataLoaded(true);
+      });
+    }
+  }, [ setDataLoaded, setDeck ]);
 
   const setHand = useCallback((hand, responsibleIdx) => {
     const stacks = StackHelper.calcStacks(hand);
@@ -149,7 +167,9 @@ function Store({children}) {
         deck: deck,
         zones: zones,
         stacks: stacks,
+        dataLoaded: dataLoaded,
         setZone: setZone,
+        loadData: loadData,
         setHoldingIdx: setHoldingIdx,
         setFocusedStackIdx: setFocusedStackIdx,
         firstCard: () => DeckMaker.getCardAtIdx(deck, 0),
