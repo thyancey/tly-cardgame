@@ -93,7 +93,7 @@ function SimpleCard({ data, theme='white' }) {
     }));
   }, [ setHoldingIdx ]);
 
-  const onMouseMove = useCallback(({ clientX, clientY }) => {
+  const onMouseDraggingCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
       ...state,
       dragPosition: {
@@ -104,7 +104,7 @@ function SimpleCard({ data, theme='white' }) {
 
   }, []);
 
-  const onMouseUp = useCallback(({ clientX, clientY }) => {
+  const onMouseDroppedCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
       ...state,
       dragPosition:null
@@ -119,13 +119,15 @@ function SimpleCard({ data, theme='white' }) {
 
   useEffect(() => {
     if(!!state.dragPosition){
-      cardRef.current.addEventListener('mousemove', onMouseMove);
-      cardRef.current.addEventListener('mouseup', onMouseUp);
+      cardRef.current.addEventListener('mouseleave', onMouseDroppedCard);
+      cardRef.current.addEventListener('mousemove', onMouseDraggingCard);
+      cardRef.current.addEventListener('mouseup', onMouseDroppedCard);
     }else{
-      cardRef.current.removeEventListener('mousemove', onMouseMove);
-      cardRef.current.removeEventListener('mouseup', onMouseUp);
+      cardRef.current.removeEventListener('mouseleave', onMouseDroppedCard);
+      cardRef.current.removeEventListener('mousemove', onMouseDraggingCard);
+      cardRef.current.removeEventListener('mouseup', onMouseDroppedCard);
     }
-  }, [ state.dragPosition, onMouseMove, onMouseUp ])
+  }, [ state.dragPosition, onMouseDraggingCard, onMouseDroppedCard ])
 
   let position = usePosition(data.position, state.dragPosition, cardRef);
 

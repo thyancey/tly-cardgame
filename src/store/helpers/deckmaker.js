@@ -133,14 +133,57 @@ const getRandomPositionOnStage = () => {
   }
 }
 
+const filterDeckToWhatsLeft = (activeCards, deck, workOrder) => {
+  if(!workOrder) workOrder = [];
+
+  return deck.filter((dC,idx) => {
+    const inHand = activeCards.find(aC => aC.deckIdx === dC.deckIdx) || workOrder.indexOf(dC.deckIdx) > -1;
+    return !inHand;
+  });
+}
+
+const getStartIdxForHand = hand => {
+  try{
+    if(!hand || hand.length === 0) return 0;
+    return hand[hand.length - 1].cardIdx + 1;
+  }catch(e){
+    console.error('couldnt get start index with hand', hand)
+    return 0;
+  }
+}
+
+const produceHand = (cardCount, deck, hand, cardLayer) => {
+  const newHand = [];
+  const workOrder = [];
+  let startIdx = 0;
+  if(cardLayer === undefined){
+    cardLayer = 1;
+  }
+
+  /* this is stupid and complicated */
+  if(hand){
+    startIdx = getStartIdxForHand(hand);
+  }else{
+    hand = [];
+  }
+
+  for(let i = 0; i < cardCount; i++){
+    let newCard = ThisModule.produceCard((i + startIdx), deck, hand, workOrder, cardLayer++);
+    if(newCard){
+      workOrder.push(newCard.deckIdx);
+    }
+    newCard && newHand.push(newCard);
+  }
+  
+  return newHand;
+}
+
 /* some mutation going on here needs to get fixed */
 /* supports producing multiple cards outside of state, kinda sloppy */
 const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
-  let filteredDeck = deck.filter((dC,idx) => {
-    const inHand = hand.find(hC => hC.deckIdx === dC.deckIdx) || workOrder.indexOf(dC.deckIdx) > -1;
-    return !inHand;
-  });
+  let filteredDeck = ThisModule.filterDeckToWhatsLeft(hand, deck, workOrder);
   if(!filteredDeck || filteredDeck.length === 0){
+    console.warn('the deck is empty!')
     return null;
   }
 
@@ -168,5 +211,7 @@ const getCardAtIdx = (cardData, cardIdx) => {
 export default {
   createTraditionalDeck: createTraditionalDeck,
   produceCard: produceCard,
-  getCardAtIdx: getCardAtIdx
+  getCardAtIdx: getCardAtIdx,
+  filterDeckToWhatsLeft: filterDeckToWhatsLeft,
+  produceHand: produceHand
 };

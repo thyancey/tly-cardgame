@@ -72,35 +72,20 @@ function Store({children}) {
   }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
 
   const dealHand = useCallback(cardCount => {
-    let newHand = [];
     topLayer = 1;
+    const newHand = DeckMaker.produceHand(cardCount, deck, [], topLayer);
 
-    for(let i = 0; i < cardCount; i++){
-      let newCard = DeckMaker.produceCard(i, deck, [], [], topLayer++);
-      newCard && newHand.push(newCard);
-    }
-  
+    topLayer += newHand.length;
     setHand(newHand);
   }, [ setHand, deck ]);
 
-  /* dealing more than 1 is not working as expected */
   const dealCard = useCallback(cardCount => {
-    let newHand = [];
-    let startIdx = hand.length;
-    
-    let workOrder = [];
-    for(let i = 0; i < cardCount; i++){
-      let newCard = DeckMaker.produceCard((i + startIdx), deck, hand, workOrder, topLayer++);
-      if(newCard){
-        workOrder.push(newCard.deckIdx);
-      }
-      newCard && newHand.push(newCard);
-    }
+    const newHand = DeckMaker.produceHand(cardCount, deck, hand, topLayer);
 
+    topLayer += newHand.length;
     setHand(hand.concat(newHand));
   }, [ setHand, deck, hand ]);
 
-  
   const discardHand = useCallback(() => {
     topLayer = 1;
     setHand([]);
@@ -154,8 +139,6 @@ function Store({children}) {
       );
     })
   }
-
-
 
   return (
     <StoreContext.Provider 

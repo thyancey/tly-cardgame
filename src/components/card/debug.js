@@ -98,7 +98,7 @@ function usePosition(restingPosition, dragPosition){
   }
 }
 
-function Card({ data, theme='white' }) {
+function DebugCard({ data, theme='white' }) {
   const { setCardPosition, setHoldingIdx, stacks, setFocusedStackIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
@@ -191,4 +191,4 @@ function Card({ data, theme='white' }) {
   );
 }
 
-export default Card;
+export default DebugCard;

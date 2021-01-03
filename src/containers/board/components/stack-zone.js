@@ -49,11 +49,10 @@ S.BgText = styled.img`
   pointer-events:none;
 `;
 
-
 S.StackEntry = styled.div`
   position:absolute;
-  right:1rem;
-  bottom:1rem;
+  right:2rem;
+  bottom:2rem;
   
   width:40rem;
   height:20rem;
@@ -139,7 +138,7 @@ S.StackPreviewCenterer = styled.ul`
   margin:0;
 
   position: absolute;
-  right: 25%;
+  right: -2rem;
   bottom: 25%;
   transform: translate(-50%, -50%);
 `;
@@ -199,7 +198,7 @@ const makeLittleCards = cards => {
   const xDelta = 25;
   const degDelta = 10;
   const yDelta = 3;
-  const startX = xDelta - (cards.length * xDelta) / 2;
+  const startX = 0 - (cards.length * xDelta);
   const startDeg = 0 - (cards.length * degDelta) / 2;
   const halfIdx = Math.floor(cards.length / 2);
 
