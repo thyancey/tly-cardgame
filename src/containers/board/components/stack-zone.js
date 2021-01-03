@@ -164,7 +164,6 @@ S.MetaLine = styled.li`
     display:inline-block;
     vertical-align:bottom;
   }
-
 `;
 
 S.MetaLineLeft = styled.div`
@@ -221,7 +220,7 @@ function MetaLine({ data }){
       <S.MetaLineLeft><span>{data.score}</span></S.MetaLineLeft>
       <S.MetaLineRight>
         <S.MetaTag>{`${data.tag}`}</S.MetaTag>
-        <S.MetaValue>{data.value}</S.MetaValue>
+        <S.MetaValue>{data.value.toString()}</S.MetaValue>
       </S.MetaLineRight>
     </S.MetaLine>
   )

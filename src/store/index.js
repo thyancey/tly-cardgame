@@ -10,8 +10,8 @@ function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
-  // const [ deck, setDeck ] = useState(data.cards);
-  const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
+  const [ deck, setDeck ] = useState(DeckMaker.createDeckFromData(data.decks.sample1.cards, data.decks.sample1.scoreMap));
+  // const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
 

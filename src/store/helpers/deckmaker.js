@@ -84,12 +84,34 @@ const SCORE_MAP = {
 
 const generateTraditionalDeckMeta = (value, suit) => {
   let allMeta = (SUIT_MAP[suit] || []).concat(VALUE_MAP[value] || []);
-  return allMeta.map(m => ({
+  return ThisModule.parseMeta(allMeta, SCORE_MAP);
+  // return allMeta.map(m => ({
+  //   tag: m[0],
+  //   value: m[1],
+  //   type: typeof m[1],
+  //   score: SCORE_MAP[m[0]] || 0
+  // }));
+};
+
+const parseMeta = (metaArray, scoreMap) => {
+  if(!metaArray) return [];
+
+  return metaArray.map(m => ({
     tag: m[0],
     value: m[1],
     type: typeof m[1],
-    score: SCORE_MAP[m[0]] || 0
+    score: scoreMap[m[0]] || 0
   }));
+}
+
+const createDeckFromData = (deckList, scoreMap) => {
+  let deckIdx = 0;
+  return deckList.map(c => ({
+    title: c.title || 'no title',
+    imageUrl: c.imageUrl || `./assets/cards/sample.jpg`,
+    meta: ThisModule.parseMeta(c.meta, scoreMap),
+    deckIdx: deckIdx++
+  })).flat()
 };
 
 const createTraditionalDeck = () => {
@@ -210,6 +232,8 @@ const getCardAtIdx = (cardData, cardIdx) => {
 
 export default {
   createTraditionalDeck: createTraditionalDeck,
+  createDeckFromData: createDeckFromData,
+  parseMeta: parseMeta,
   produceCard: produceCard,
   getCardAtIdx: getCardAtIdx,
   filterDeckToWhatsLeft: filterDeckToWhatsLeft,

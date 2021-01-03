@@ -40,7 +40,7 @@ const calcStackMeta = ( cardIdxs, hand ) => {
 
   return stackMeta
     .filter(sM => !foundInTags(sM.tag, invalidatedTags)) //- remove any invalid groups
-    .filter(sM => sM.count > 1); //- remove any single counts (TODO, bonus cards later)
+    .filter(sM => sM.count === cardIdxs.length); //- if meta doesnt match all, remove it (TODO, bonus cards later)
 }
 
 const getSortedCardDetails = (cardStack, hand) => 
