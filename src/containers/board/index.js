@@ -5,7 +5,7 @@ import SimpleCard from '../../components/card/simple';
 import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
-import StackInfo from './components/stackinfo';
+import StackZone from './components/stack-zone';
 import ScoreInfo from './components/scoreinfo';
 
 const S = {};
@@ -49,10 +49,10 @@ S.InfoZone = styled.div`
 S.StackInfoZone = styled.div`
   position:absolute;
   z-index:1;
-  bottom: -30rem;
-  right: -14rem;
-  width: 60rem;
-  height: 60rem;
+  bottom: 0rem;
+  right: 0rem;
+  width: 46rem;
+  height: 30rem;
 `;
 
 S.DiscardZone = styled.div`
@@ -85,7 +85,7 @@ S.BgImage = styled.img`
 function Board() {
   const { hand, setFocusedStackIdx } = useContext(StoreContext);
   const onBgMouseOver = useCallback(() => {
-    setFocusedStackIdx(-1);
+    // setFocusedStackIdx(-1);
   }, [ setFocusedStackIdx ]);
 
   return (
@@ -101,7 +101,7 @@ function Board() {
         <DropZone action={'discard'} />
       </S.DiscardZone>
       <S.StackInfoZone>
-        <StackInfo />
+        <StackZone />
       </S.StackInfoZone>
 
       {hand.map((c, idx) => 

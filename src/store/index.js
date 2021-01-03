@@ -120,7 +120,12 @@ function Store({children}) {
         if(z.id === zoneId){
           return {
             ...z,
-            bounds: bounds
+            bounds: {
+              top: bounds.top,
+              left: bounds.left,
+              right: bounds.right,
+              bottom: bounds.bottom
+            }
           }
         }else{
           return z;
@@ -130,7 +135,12 @@ function Store({children}) {
       setZones(zones.concat([
         {
           id:zoneId,
-          bounds: bounds
+          bounds: {
+            top: bounds.top,
+            left: bounds.left,
+            right: bounds.right,
+            bottom: bounds.bottom
+          }
         }
       ]))
     }

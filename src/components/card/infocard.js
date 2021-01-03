@@ -1,13 +1,10 @@
 import React, {} from 'react';
-import styled, { css } from 'styled-components';
-import { getShadow, getColor } from '../../themes/index';
+import styled, { } from 'styled-components';
+import {  getColor } from '../../themes/index';
 const S = {};
 
 S.Card = styled.div`
   background-color: 'white';
-  color:black;
-
-  /* margin:7.5rem 5rem; */
   position:absolute;
 `;
 
