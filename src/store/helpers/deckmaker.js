@@ -114,10 +114,10 @@ const getCompleteCardUrl = (c, deckPath) => {
   }
 }
 
-const getLevelData = deck => {
+const getLevelData = (levelIdx, deck) => {
   try{
     return {
-      targetScore: deck.levels[0].targetScore
+      targetScore: deck.levels[levelIdx].targetScore
     }
   }catch(e){
     return {

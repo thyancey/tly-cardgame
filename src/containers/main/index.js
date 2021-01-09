@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import Board from '../board';
+import GameMaster from '../../store/helpers/gamemaster';
 import Store from '../../store';
 import styled from 'styled-components';
 
@@ -10,6 +11,8 @@ S.Container = styled.div`
   height:100%;
   overflow:hidden;
 `;
+
+window.gm = GameMaster;
 
 function Main() {
   return (

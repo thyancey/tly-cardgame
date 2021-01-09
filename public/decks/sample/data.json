@@ -2,11 +2,7 @@
   "config":{
   },
   "deck":{
-    "levels":[
-      {
-        "targetScore": 2630
-      }
-    ],
+    "name": "sample",
     "scoreMap":{
       "label": 100,
       "color": 5,
@@ -16,8 +12,34 @@
       "sex": 50,
       "meme-status": 1000
     },
+    "levels":[
+      {
+        "title": "two cards",
+        "targetScore": 500,
+        "deck":[ 
+          "traditional_ace_d",
+          "traditional_ace_h"
+        ]
+      },
+      {
+        "title": "just an example",
+        "targetScore": 2630,
+        "deck":[ 
+          "traditional_king_c",
+          "meme_knuckles",
+          "meme_pepe",
+          "meme_mhahart",
+          "stock_frog",
+          "traditional_jack_s",
+          "traditional_queen_h",
+          "traditional_ace_d",
+          "traditional_ace_h"
+        ]
+      }
+    ],
     "cards":[
       {
+        "id": "traditional_king_c",
         "title": "sample_kingc",
         "imageUrl": "./assets/cards/sample/KC.jpg",
         "meta":[
@@ -30,6 +52,7 @@
         ]
       },
       {
+        "id": "meme_knuckles",
         "title": "Ugandan Knuckles",
         "imageUrl": "https://cdn.vox-cdn.com/thumbor/gy9OyG0Oh565wH7eXxa5tm4mheE=/0x0:1200x600/1200x800/filters:focal(504x204:696x396)/cdn.vox-cdn.com/uploads/chorus_image/image/58292995/780610d87ec720c3.0.png",
         "meta":[
@@ -39,6 +62,7 @@
         ]
       },
       {
+        "id": "meme_pepe",
         "title": "pepe",
         "imageUrl": "https://ca-times.brightspotcdn.com/dims4/default/3db78d2/2147483647/strip/true/crop/1280x1313+0+0/resize/840x862!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fb0%2F0d%2Fad403cece4566024bb808fd43bfe%2Fla-1476056560-snap-photo",
         "meta":[
@@ -50,6 +74,7 @@
         ]
       },
       {
+        "id": "meme_mhahart",
         "title": "mha hart mah sole",
         "imageUrl": "https://i.kym-cdn.com/photos/images/newsfeed/001/252/990/6f4.jpg",
         "meta":[
@@ -60,6 +85,7 @@
         ]
       },
       {
+        "id": "stock_frog",
         "title": "stockphoto frog",
         "imageUrl": "https://images.pexels.com/photos/70083/frog-macro-amphibian-green-70083.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
         "meta":[
@@ -69,6 +95,7 @@
         ]
       },
       {
+        "id": "traditional_jack_s",
         "title": "sample_jacks",
         "asset": "JS.jpg",
         "meta":[
@@ -81,6 +108,7 @@
         ]
       },
       {
+        "id": "traditional_queen_h",
         "title": "sample_queenh",
         "asset": "QH.jpg",
         "meta":[
@@ -93,6 +121,7 @@
         ]
       },
       {
+        "id": "traditional_ace_d",
         "title": "sample_aced",
         "asset": "AD.jpg",
         "meta":[
@@ -103,6 +132,7 @@
         ]
       },
       {
+        "id": "traditional_ace_h",
         "title": "sample_aceh",
         "asset": "AH.jpg",
         "meta":[

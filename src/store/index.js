@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { StoreContext } from './context';
 import StackHelper from './helpers/stack';
 import DeckMaker from './helpers/deckmaker';
+import GameMaster from './helpers/gamemaster';
 import DataHelper from './helpers/data';
 
 let topLayer = 0;
@@ -10,8 +11,8 @@ function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
-  const [ deck, setDeck ] = useState([]);
-  // const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
+  // const [ deck, setDeck ] = useState([]);
+  const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
   const [ dataLoaded, setDataLoaded ] = useState(false);
@@ -30,12 +31,21 @@ function Store({children}) {
       // console.log('loading data from ', dataUrl);
       DataHelper.loadData(dataUrl, (data) => {
         // console.log('heres your data', data);
-        setDeck(DeckMaker.createDeckFromData(deckName, data.deck.cards, data.deck.scoreMap));
-        setLevel(DeckMaker.getLevelData(data.deck));
+        // setDeck(DeckMaker.createDeckFromData(deckName, data.deck.cards, data.deck.scoreMap));
+        GameMaster.setRoundData(data.deck.levels);
+        GameMaster.setCardPackData(data.deck.cards, data.deck.scoreMap, data.deck.name);
+        GameMaster.setRound(0);
+        setDeck(GameMaster.getCardPack());
+
+        setLevel(GameMaster.getRoundData(0));
+        // setLevel(DeckMaker.getLevelData(data.deck));
+        setDataLoaded(true);
+
+
         setDataLoaded(true);
       });
     }
-  }, [ setDataLoaded, setDeck ]);
+  }, [ setDataLoaded ]);
 
   const setHand = useCallback((hand, responsibleIdx) => {
     const stacks = StackHelper.calcStacks(hand);
@@ -95,18 +105,19 @@ function Store({children}) {
 
   const dealHand = useCallback(cardCount => {
     topLayer = 1;
-    const newHand = DeckMaker.produceHand(cardCount, deck, [], topLayer);
+    
+    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(), [], topLayer);
 
     topLayer += newHand.length;
     setHand(newHand);
-  }, [ setHand, deck ]);
+  }, [ setHand ]);
 
   const dealCard = useCallback(cardCount => {
-    const newHand = DeckMaker.produceHand(cardCount, deck, hand, topLayer);
+    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(), hand, topLayer);
 
     topLayer += newHand.length;
     setHand(hand.concat(newHand));
-  }, [ setHand, deck, hand ]);
+  }, [ setHand, hand ]);
 
   const discardHand = useCallback(() => {
     topLayer = 1;
@@ -178,7 +189,7 @@ function Store({children}) {
         loadData: loadData,
         setHoldingIdx: setHoldingIdx,
         setFocusedStackIdx: setFocusedStackIdx,
-        firstCard: () => DeckMaker.getCardAtIdx(deck, 0),
+        firstCard: () => DeckMaker.getCardAtIdx(GameMaster.getRoundDeck(), 0),
         setCardPosition: setCardPosition,
         dealHand: dealHand,
         dealCard: dealCard,
