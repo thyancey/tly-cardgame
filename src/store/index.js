@@ -7,11 +7,14 @@ import DataHelper from './helpers/data';
 
 let topLayer = 0;
 
+// const DEFAULT_DECK = 'sample';
+const DEFAULT_DECK = 'traditional';
+
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
-  const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
+  const [ deck, setDeck ] = useState([]);
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
   const [ dataLoaded, setDataLoaded ] = useState(false);
@@ -22,30 +25,26 @@ function Store({children}) {
   }, [ setRoundData ]);
 
   const loadData = useCallback(deckName => {
-    deckName = deckName || 'sample';
+    deckName = deckName || DEFAULT_DECK;
 
-    if(deckName === 'traditional'){
-      setDeck(DeckMaker.createTraditionalDeck());
-      setDataLoaded(true);
-    }else{
-      const dataUrl = `./decks/${deckName}/data.json`;
-      // console.log('loading data from ', dataUrl);
-      DataHelper.loadData(dataUrl, (data) => {
-        try{
-          console.log('heres your data', data);
-          GameMaster.setRoundData(data.deck.rounds);
-          GameMaster.setCardPackData(data.deck.cards, data.deck.scoreMap, data.deck.name);
 
-          const roundIdx = 0;
-          setAllRoundData(roundIdx);
-          setDeck(GameMaster.getRoundDeck(roundIdx));
-          setDataLoaded(true);
-        }
-        catch(e){
-          console.error('problem intializing data', e)
-        }
-      });
-    }
+    const dataUrl = `./decks/${deckName}/data.json`;
+    // console.log('loading data from ', dataUrl);
+    DataHelper.loadData(dataUrl, (data) => {
+      try{
+        console.log('heres your data', data);
+        GameMaster.setRoundData(data.deck.rounds);
+        GameMaster.setCardPackData(data.deck.cards, data.deck.scoreMap, data.deck.name);
+
+        const roundIdx = 0;
+        setAllRoundData(roundIdx);
+        setDeck(GameMaster.getRoundDeck(roundIdx));
+        setDataLoaded(true);
+      }
+      catch(e){
+        console.error('problem intializing data', e)
+      }
+    });
   }, [ setDataLoaded, setAllRoundData ]);
 
   const setHand = useCallback((hand, responsibleIdx) => {
@@ -104,15 +103,16 @@ function Store({children}) {
     
 
   }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
-  
-  const dealHand = useCallback(cardCount => {
+
+  const dealHand = useCallback(cardLimit => {
     topLayer = 1;
     
-    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(roundData.idx), [], topLayer);
+    const newHand = DeckMaker.produceHand(deck.length - (cardLimit || 0), GameMaster.getRoundDeck(roundData.idx), [], topLayer);
 
     topLayer += newHand.length;
+    console.log('dealHand:', newHand)
     setHand(newHand);
-  }, [ setHand, roundData.idx ]);
+  }, [ setHand, roundData.idx, deck ]);
 
   const dealCard = useCallback(cardCount => {
     const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(roundData.idx), hand, topLayer);

@@ -81,8 +81,14 @@ const getRoundDeck = (roundIdx) => {
     console.error('getRoundDeck missing valid roundIdx', roundIdx);
     return [];
   }
-  let roundCardIds = ThisModule.getRound(roundIdx).deck;
-  return ThisModule.getCardPack().filter(c => roundCardIds.indexOf(c.id) > -1);
+  const rD = ThisModule.getRound(roundIdx);
+  if(rD.deck){
+    let roundCardIds = ThisModule.getRound(roundIdx).deck;
+    return ThisModule.getCardPack().filter(c => roundCardIds.indexOf(c.id) > -1);
+  }else{
+    //- if no custom deck defined, give the whole thing
+    return ThisModule.getCardPack();
+  }
 }
 
 const getStore = () => store;

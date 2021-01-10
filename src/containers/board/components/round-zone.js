@@ -33,6 +33,9 @@ S.TextArea = styled.div`
 S.ZoneText = styled.p`
 
 `;
+S.CardCount = styled.p`
+  font-size:1rem;
+`;
 
 S.BasicButton = styled.div`
   display:inline-block;
@@ -70,7 +73,7 @@ function RoundButton({ roundIdx, onClick, isActive }){
 }
 
 function RoundZone() {
-  const { nextRound, prevRound, roundData, setRound } = useContext(StoreContext);
+  const { nextRound, prevRound, roundData, setRound, deck, hand } = useContext(StoreContext);
 
   const renderRounds = (count) => {
     let buttons = [];
@@ -87,6 +90,11 @@ function RoundZone() {
     return buttons;
   }
 
+  const numCardsInDrawPile = useMemo(() => 
+    deck.length - hand.length, 
+    [ deck.length, hand.length ]
+  );
+
   return (
     <S.Container >
       <S.BasicButton onClick={() => prevRound()} role="button">
@@ -97,8 +105,8 @@ function RoundZone() {
         {'+'}
       </S.BasicButton>
       <S.TextArea>
-        <S.ZoneText>{`Round: ${roundData.idx + 1}`}</S.ZoneText>
-        <S.ZoneText>{`${roundData.title}`}</S.ZoneText>
+        <S.ZoneText>{`Round: ${roundData.idx + 1}: "${roundData.title}"`}</S.ZoneText>
+        <S.CardCount>{`${numCardsInDrawPile} cards left`}</S.CardCount>
       </S.TextArea>
       <S.Bg />
     </S.Container>

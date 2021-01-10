@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import Board from '../board';
 import GameMaster from '../../store/helpers/gamemaster';
+import DeckMaker from '../../store/helpers/deckmaker';
 import Store from '../../store';
 import styled from 'styled-components';
 
@@ -13,6 +14,7 @@ S.Container = styled.div`
 `;
 
 window.gm = GameMaster;
+window.dm = DeckMaker;
 
 function Main() {
   return (

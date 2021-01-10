@@ -62,11 +62,11 @@ function DrawZone() {
 
   return (
     <S.Container >
-      <S.BasicButton onClick={() => dealHand(10)} role="button">
+      <S.BasicButton onClick={() => dealHand()} role="button">
         {'DEAL'}
       </S.BasicButton>
       <S.BasicButton onClick={() => dealCard(1)} role="button">
-        {'HIT 1'}
+        {'DRAW 1 MORE'}
       </S.BasicButton>
       <S.BasicButton onClick={() => discardHand()} role="button">
         {'DISCARD ALL'}
