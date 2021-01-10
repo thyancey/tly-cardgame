@@ -11,14 +11,15 @@ function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
-  // const [ deck, setDeck ] = useState([]);
   const [ deck, setDeck ] = useState(DeckMaker.createTraditionalDeck());
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
   const [ dataLoaded, setDataLoaded ] = useState(false);
-  const [ level, setLevel ] = useState({
-    targetScore: 0
-  });
+  const [ roundData, setRoundData ] = useState({});
+
+  const setAllRoundData =  useCallback(newRoundIdx => {
+    setRoundData(GameMaster.getRoundData(newRoundIdx));
+  }, [ setRoundData ]);
 
   const loadData = useCallback(deckName => {
     deckName = deckName || 'sample';
@@ -30,22 +31,22 @@ function Store({children}) {
       const dataUrl = `./decks/${deckName}/data.json`;
       // console.log('loading data from ', dataUrl);
       DataHelper.loadData(dataUrl, (data) => {
-        // console.log('heres your data', data);
-        // setDeck(DeckMaker.createDeckFromData(deckName, data.deck.cards, data.deck.scoreMap));
-        GameMaster.setRoundData(data.deck.levels);
-        GameMaster.setCardPackData(data.deck.cards, data.deck.scoreMap, data.deck.name);
-        GameMaster.setRound(0);
-        setDeck(GameMaster.getCardPack());
+        try{
+          console.log('heres your data', data);
+          GameMaster.setRoundData(data.deck.rounds);
+          GameMaster.setCardPackData(data.deck.cards, data.deck.scoreMap, data.deck.name);
 
-        setLevel(GameMaster.getRoundData(0));
-        // setLevel(DeckMaker.getLevelData(data.deck));
-        setDataLoaded(true);
-
-
-        setDataLoaded(true);
+          const roundIdx = 0;
+          setAllRoundData(roundIdx);
+          setDeck(GameMaster.getRoundDeck(roundIdx));
+          setDataLoaded(true);
+        }
+        catch(e){
+          console.error('problem intializing data', e)
+        }
       });
     }
-  }, [ setDataLoaded ]);
+  }, [ setDataLoaded, setAllRoundData ]);
 
   const setHand = useCallback((hand, responsibleIdx) => {
     const stacks = StackHelper.calcStacks(hand);
@@ -100,24 +101,25 @@ function Store({children}) {
   
       return c;
     }), foundCard.cardIdx);
+    
 
   }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
-
+  
   const dealHand = useCallback(cardCount => {
     topLayer = 1;
     
-    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(), [], topLayer);
+    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(roundData.idx), [], topLayer);
 
     topLayer += newHand.length;
     setHand(newHand);
-  }, [ setHand ]);
+  }, [ setHand, roundData.idx ]);
 
   const dealCard = useCallback(cardCount => {
-    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(), hand, topLayer);
+    const newHand = DeckMaker.produceHand(cardCount, GameMaster.getRoundDeck(roundData.idx), hand, topLayer);
 
     topLayer += newHand.length;
     setHand(hand.concat(newHand));
-  }, [ setHand, hand ]);
+  }, [ setHand, hand, roundData.idx ]);
 
   const discardHand = useCallback(() => {
     topLayer = 1;
@@ -173,6 +175,39 @@ function Store({children}) {
     })
   }
 
+  const nextRound = useCallback(() => {
+    const foundIdx = GameMaster.getAdjacentRoundIdx(roundData.idx, 1);
+    if(foundIdx > -1){
+      discardHand();
+      setAllRoundData(foundIdx);
+      setDeck(GameMaster.getRoundDeck(foundIdx));
+    }else{
+      console.log('nextRound, end of rounds!');
+    }
+  }, [ roundData.idx, setAllRoundData, discardHand ]);
+  
+  const prevRound = useCallback(() => {
+    const foundIdx = GameMaster.getAdjacentRoundIdx(roundData.idx, -1);
+    if(foundIdx > -1){
+      discardHand();
+      setAllRoundData(foundIdx);
+      setDeck(GameMaster.getRoundDeck(foundIdx))
+    }else{
+      console.log('nextRound, end of rounds!');
+    }
+  }, [ roundData.idx, setAllRoundData, discardHand ]);
+
+  const setRound = useCallback(roundIdx => {
+    const foundRound = GameMaster.getRound(roundIdx);
+    if(foundRound){
+      discardHand();
+      setAllRoundData(roundIdx);
+      setDeck(GameMaster.getRoundDeck(roundIdx))
+    }else{
+      console.log(`setRound, roundIdx "${roundIdx}" not found`);
+    }
+  }, [ setAllRoundData, discardHand ])
+
   return (
     <StoreContext.Provider 
       value={{
@@ -183,13 +218,15 @@ function Store({children}) {
         zones: zones,
         stacks: stacks,
         dataLoaded: dataLoaded,
-        level: level,
-        setLevel: setLevel,
+        roundData: roundData,
         setZone: setZone,
+        nextRound: nextRound,
+        prevRound: prevRound,
+        setRound: setRound,
         loadData: loadData,
         setHoldingIdx: setHoldingIdx,
         setFocusedStackIdx: setFocusedStackIdx,
-        firstCard: () => DeckMaker.getCardAtIdx(GameMaster.getRoundDeck(), 0),
+        firstCard: () => DeckMaker.getCardAtIdx(GameMaster.getRoundDeck(roundData.idx), 0),
         setCardPosition: setCardPosition,
         dealHand: dealHand,
         dealCard: dealCard,

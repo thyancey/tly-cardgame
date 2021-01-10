@@ -114,18 +114,6 @@ const getCompleteCardUrl = (c, deckPath) => {
   }
 }
 
-const getLevelData = (levelIdx, deck) => {
-  try{
-    return {
-      targetScore: deck.levels[levelIdx].targetScore
-    }
-  }catch(e){
-    return {
-      targetScore: 2000
-    }
-  }
-}
-
 const createDeckFromData = (deckName, deckList, scoreMap) => {
   let deckIdx = 0;
   return deckList.map(c => ({
@@ -160,7 +148,7 @@ const getInitialPlacement = () => {
   shifter += 2;
   return {
     x: 250 + shifter,
-    y: 100 + shifter
+    y: 200 + shifter
   }
 }
 
@@ -255,7 +243,6 @@ const getCardAtIdx = (cardData, cardIdx) => {
 export default {
   createTraditionalDeck: createTraditionalDeck,
   createDeckFromData: createDeckFromData,
-  getLevelData: getLevelData,
   parseMeta: parseMeta,
   produceCard: produceCard,
   getCardAtIdx: getCardAtIdx,

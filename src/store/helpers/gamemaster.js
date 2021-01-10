@@ -2,7 +2,6 @@ import ThisModule from './gamemaster';
 import DeckMaker from './deckmaker';
 
 const store = {
-  'roundIdx': -1,
   'rounds': [],
   'cardPack': [],
   'scoreMap': [],
@@ -27,42 +26,47 @@ const setCardPackData = (cardPackData, scoreMap, cardPackName) => {
   })).flat();
 }
 
-const setRound = roundIdx => {
-  if(store.rounds[roundIdx]){
-    store.roundIdx = roundIdx;
-  }else{
-    console.error('trying to set invalid roundIdx', roundIdx);
-  }
-}
 
-const nextRound = () => {
-  if(store.rounds.length - 1 > store.roundIdx){
-    ThisModule.setRound(store.roundIdx + 1);
-  }else{
-    console.log('no more rounds!');
-  }
-}
-
-const getRound = () => {
+const getRound = (roundIdx) => {
   try{
-    return store.rounds[store.roundIdx];
+    console.log('getting round', roundIdx, store.rounds)
+    return store.rounds[roundIdx];
   }catch(e){
     console.error('could not retrieve current round');
   }
   
 }
 
-const getRoundData = (roundIdx) => {
-  try{
-    if(roundIdx === undefined){
-      roundIdx = store.roundIdx;
-    }
+const getNumRounds = () => {
+  return store.rounds.length;
+}
 
+const getAdjacentRoundIdx = (curIdx, change) => {
+  const nextIdx = curIdx + change;
+  if(nextIdx < 0){
+    console.log('round is below 0!');
+    return -1;
+  }
+
+  if(store.rounds.length > nextIdx){
+    return nextIdx;
+  }else{
+    console.log('no more rounds!');
+    return -1;
+  }
+}
+
+const getRoundData = (roundIdx) => {
+  console.log('getRoundData', roundIdx, store.rounds)
+  try{
     return {
-      targetScore: store.rounds[roundIdx].targetScore
+      idx: roundIdx,
+      targetScore: store.rounds[roundIdx].targetScore,
+      title: store.rounds[roundIdx].title,
     }
   }catch(e){
     return {
+      idx: -1,
       targetScore: 2000
     }
   }
@@ -71,8 +75,13 @@ const getCardPack = () => {
   return store.cardPack;
 }
 
-const getRoundDeck = () => {
-  let roundCardIds = ThisModule.getRound().deck;
+const getRoundDeck = (roundIdx) => {
+  console.log('getRoundDeck');
+  if(isNaN(roundIdx)){
+    console.error('getRoundDeck missing valid roundIdx', roundIdx);
+    return [];
+  }
+  let roundCardIds = ThisModule.getRound(roundIdx).deck;
   return ThisModule.getCardPack().filter(c => roundCardIds.indexOf(c.id) > -1);
 }
 
@@ -81,11 +90,11 @@ const getStore = () => store;
 export default {
   setRoundData: setRoundData,
   setCardPackData: setCardPackData,
-  setRound: setRound,
-  nextRound: nextRound,
+  getAdjacentRoundIdx: getAdjacentRoundIdx,
   getRound: getRound,
   getRoundDeck: getRoundDeck,
   getRoundData: getRoundData,
   getStore: getStore,
-  getCardPack: getCardPack
+  getCardPack: getCardPack,
+  getNumRounds: getNumRounds
 };

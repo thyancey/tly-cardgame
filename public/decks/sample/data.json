@@ -12,7 +12,7 @@
       "sex": 50,
       "meme-status": 1000
     },
-    "levels":[
+    "rounds":[
       {
         "title": "two cards",
         "targetScore": 500,

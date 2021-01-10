@@ -6,7 +6,8 @@ import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
 import StackZone from './components/stack-zone';
-import ScoreInfo from './components/scoreinfo';
+import RoundZone from './components/round-zone';
+import InfoZone from './components/info-zone';
 
 const S = {};
 
@@ -33,6 +34,14 @@ S.DrawZone = styled.div`
   z-index:99999999;
   top:1rem;
   left:1rem;
+`;
+
+S.RoundZone = styled.div`
+  position:absolute;
+  z-index:99999999;
+  top:1rem;
+  left:16rem;
+  right:20rem;
 `;
 
 S.InfoZone = styled.div`
@@ -106,9 +115,12 @@ function Board() {
       <S.DrawZone>
         <DrawZone />
       </S.DrawZone>
+      <S.RoundZone>
+        <RoundZone />
+      </S.RoundZone>
       <S.InfoZone>
         <p>{'info'}</p>
-        <ScoreInfo />
+        <InfoZone />
       </S.InfoZone>
       <S.DiscardZone>
         <DropZone action={'discard'} />
