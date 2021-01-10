@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, { useMemo } from 'react';
 import styled, { } from 'styled-components';
 import {  getColor } from '../../themes/index';
 const S = {};
@@ -21,16 +21,16 @@ S.InnerCard = styled.div`
   box-shadow: -1px -1px 5px 1px ${getColor('grey')};
 `;
 
-S.Background = styled.img`
+/* using background-image instead of img made this not request images over and over again? */
+S.Background = styled.div`
+  height: 100%;
   background-size: contain;
-  width:100%;
-  height:100%;
-  border-radius:1rem;
+  background-repeat: no-repeat;
+  border-radius: 1rem;
+  background-image: url(${p => p.src});
 `;
 
-
 function InfoCard({ data }) {
-
   return (
     <S.Card>
       <S.InnerCard >
