@@ -10,6 +10,7 @@ import HandZone from './components/hand-zone';
 import StackConsole from './components/stack-console';
 import RoundZone from './components/round-zone';
 import InfoZone from './components/info-zone';
+import { CARDSTATUS } from '../../utils/constants';
 
 const S = {};
 
@@ -90,6 +91,16 @@ S.BgImage = styled.img`
   left:0;
 `;
 
+S.CardContainer = styled.div`
+
+`;
+
+S.HeldCardContainer = styled.div`
+  position:absolute;
+  left:0;
+  top:0;
+`;
+
 function Board() {
   const { actions, hand, dataLoaded  } = useContext(StoreContext);
 
@@ -108,10 +119,15 @@ function Board() {
     }
   }, [ actions.loadData ]);
 
-  const cardsNotInHand = useMemo(() => 
-    hand.filter(h => !h.inHand),
+  const cardsOnTable = useMemo(() => 
+    hand.filter(h => h.status > CARDSTATUS.HAND_HOLDING && h.status < CARDSTATUS.DISCARDED),
     [ hand ]
   );
+  // const heldCard = useMemo(() => 
+  //   hand.find(h => h.status === CARDSTATUS.HAND_HOLDING || h.status === CARDSTATUS.TABLE_HOLDING),
+  //   // hand.find(h => h.status === CARDSTATUS.HAND_HOLDING),
+  //   [ hand ]
+  // );
 
 
   if(!dataLoaded){
@@ -139,9 +155,18 @@ function Board() {
       </S.StackInfoZone> */}
       <StackConsole />
 
-      {cardsNotInHand.map((c, idx) => 
-        <SimpleCard data={c} key={c.cardIdx} />
-      )}
+
+      <S.CardContainer id="cc">
+        {cardsOnTable.map((c, idx) => 
+          <SimpleCard data={c} key={c.cardIdx} />
+        )}
+      </S.CardContainer>
+
+      {/* <S.HeldCardContainer id="hcc">
+        {heldCard && (
+          <SimpleCard data={heldCard} key={heldCard.cardIdx} />
+        )}
+      </S.HeldCardContainer> */}
       
       <S.Bg onMouseOver={onBgMouseOver}>
         {/* <S.BgImage src={'./assets/bg/bg1.jpg' } /> */}

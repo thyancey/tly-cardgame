@@ -4,11 +4,13 @@ import StackHelper from './helpers/stack';
 import DeckMaker from './helpers/deckmaker';
 import GameMaster from './helpers/gamemaster';
 import DataHelper from './helpers/data';
+import { CARDSTATUS } from '../utils/constants';
 
 let topLayer = 0;
 
 // const DEFAULT_PACK = 'sample';
 const DEFAULT_PACK = 'traditional';
+
 
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
@@ -66,57 +68,6 @@ function Store({children}) {
   const discardCard = useCallback(cardIdx => {
     setHand(hand.filter(h => h.cardIdx !== cardIdx));
   }, [ setHand, hand ]);
-
-  /* dragging a card around.. */
-  const setCardPosition = useCallback((cardIdx, newPosition, didDrop) => {
-    if(cardIdx === holdingIdx){
-      setHoldingIdx(-1);
-    }
-
-    const foundCard = hand.find(c => c.cardIdx === cardIdx);
-    if(foundCard && didDrop){
-      let activeZones = null;
-      if(foundCard){
-        activeZones = getZonesAtPosition(newPosition, zones);
-      }
-
-      if(activeZones.find(az => az.id === 'discard')){
-        discardCard(cardIdx);
-        return;
-      }
-    }
-
-    setHand(hand.map(c => {
-      if(c.cardIdx === cardIdx){
-        
-        return {
-          ...c,
-          layer: topLayer++,
-          position:{
-            x: newPosition.x,
-            y: newPosition.y
-          }
-        }
-      }
-  
-      return c;
-    }), foundCard.cardIdx);
-    
-
-  }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
-
-  const removeCardInHand = useCallback((cardIdx, state) => {
-    return setHand(hand.map(h => {
-      if(h.cardIdx === cardIdx){
-        return {
-          ...h,
-          inHand:false
-        }
-      }else{
-        return h;
-      }
-    }));
-  }, [ hand, setHand ]);
 
   const dealHand = useCallback(cardLimit => {
     topLayer = 1;
@@ -218,7 +169,91 @@ function Store({children}) {
     }else{
       console.log(`setRound, roundIdx "${roundIdx}" not found`);
     }
-  }, [ setAllRoundData, discardHand ])
+  }, [ setAllRoundData, discardHand ]);
+
+  const dropCardStatus = (status, location) => {
+    if(CARDSTATUS[location]){
+      return CARDSTATUS[location];
+    };
+
+    if(status === CARDSTATUS.HAND_HOLDING){
+      return CARDSTATUS.HAND;
+    }else if(status === CARDSTATUS.TABLE_HOLDING){
+      return CARDSTATUS.TABLE;
+    }else{
+      return status;
+    }
+  }
+
+  const holdCardStatus = status => {
+    if(status === CARDSTATUS.HAND){
+      return CARDSTATUS.HAND_HOLDING;
+    }else if(status === CARDSTATUS.TABLE){
+      return CARDSTATUS.TABLE_HOLDING;
+    }else{
+      return status;
+    }
+  }
+
+  const holdCard = useCallback(cardIdx => {
+    setHoldingIdx(cardIdx);
+
+    setHand(hand.map(c => {
+      if(c.cardIdx === cardIdx){
+        return {
+          ...c,
+          status:holdCardStatus(c.status)
+        }
+      }else{
+        const droppedStatus = dropCardStatus(c.status);
+        if(c.status !== droppedStatus){
+          return {
+            ...c,
+            status: droppedStatus
+          }
+        }else{
+          return c;
+        }
+      }
+    }));
+  }, [ setHoldingIdx, hand, setHand ]);
+
+  const dropCard = useCallback((cardIdx, location, newPosition) => {
+    console.log('drop ', cardIdx);
+    setHoldingIdx(-1);
+    if(cardIdx === holdingIdx){
+      setHoldingIdx(-1);
+    }
+/*
+    const foundCard = hand.find(c => c.cardIdx === cardIdx);
+    if(foundCard && didDrop){
+      let activeZones = null;
+      if(foundCard){
+        activeZones = getZonesAtPosition(newPosition, zones);
+      }
+
+      if(activeZones.find(az => az.id === 'discard')){
+        discardCard(cardIdx);
+        return;
+      }
+    }*/
+
+    setHand(hand.map(c => {
+      if(c.cardIdx === cardIdx){
+        return {
+          ...c,
+          status:dropCardStatus(c.status, location),
+          layer: topLayer++,
+          position: newPosition ? {
+            x: newPosition.x,
+            y: newPosition.y
+          } : c.position
+        }
+      }
+      
+      return c;
+    }));
+  }, [ setHoldingIdx, hand, setHand, holdingIdx ]);
 
   return (
     <StoreContext.Provider 
@@ -241,11 +276,11 @@ function Store({children}) {
           discardRandomCard: discardRandomCard,
           discardHand: discardHand,
           loadData: loadData,
-          removeCardInHand: removeCardInHand,
           setZone: setZone,
           setHoldingIdx: setHoldingIdx,
-          setCardPosition: setCardPosition,
           setFocusedStackIdx: setFocusedStackIdx,
+          holdCard: holdCard,
+          dropCard: dropCard
         }
       }}>
         {children}

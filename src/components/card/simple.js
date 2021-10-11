@@ -52,6 +52,10 @@ S.Background = styled.img`
   border-radius:1rem;
 `;
 
+S.DebugStatus = styled.h3`
+  color:white;
+`
+
 function usePosition(restingPosition, dragPosition){
 
   if(!!dragPosition){
@@ -83,7 +87,12 @@ function SimpleCard({ data, theme='white' }) {
 
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
-    actions.setHoldingIdx(cardIdx);
+    actions.holdCard(cardIdx);
+    console.log('hold', cardIdx)
+    console.log('dragPosition', {
+      x: clientX,
+      y: clientY
+    })
 
     setState(state => ({
       ...state,
@@ -92,7 +101,7 @@ function SimpleCard({ data, theme='white' }) {
         y: clientY
       }
     }));
-  }, [ actions.setHoldingIdx ]);
+  }, [ actions.holdCard ]);
 
   const onMouseDraggingCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
@@ -111,12 +120,13 @@ function SimpleCard({ data, theme='white' }) {
       dragPosition:null
     }));
 
-    actions.setCardPosition(data.cardIdx, {
+    console.log('simple: mouseDropped', data.cardIdx);
+    actions.dropCard(data.cardIdx, 'TABLE', {
       x: clientX,
       y: clientY
-    }, true);
+    });
 
-  }, [ data.cardIdx, actions.setCardPosition ]);
+  }, [ data.cardIdx, actions.dropCard ]);
 
   useEffect(() => {
     if(!!state.dragPosition){
@@ -165,6 +175,7 @@ function SimpleCard({ data, theme='white' }) {
         isDragging={!!state.dragPosition}
         stackStyle={stackStyle}
       >
+        <S.DebugStatus>{data.status}</S.DebugStatus>
         <S.Background src={data.info.imageUrl} draggable={false} />
       </S.InnerCard>
     </S.Card>
