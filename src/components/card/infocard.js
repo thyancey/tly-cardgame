@@ -31,6 +31,7 @@ S.Background = styled.div`
 `;
 
 function InfoCard({ data }) {
+  console.log('data', data)
   return (
     <S.Card>
       <S.InnerCard >

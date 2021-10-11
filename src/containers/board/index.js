@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useEffect } from 'react';
+import React, { useContext, useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
 import SimpleCard from '../../components/card/simple';
@@ -6,6 +6,7 @@ import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
 import StackZone from './components/stack-zone';
+import HandZone from './components/hand-zone';
 import StackConsole from './components/stack-console';
 import RoundZone from './components/round-zone';
 import InfoZone from './components/info-zone';
@@ -82,6 +83,7 @@ S.Bg = styled.div`
   z-index:-9999999;
 `;
 
+
 S.BgImage = styled.img`
   width: 2000px;
   top:0;
@@ -107,12 +109,19 @@ function Board() {
     }
   }, [ loadData ]);
 
+  const cardsNotInHand = useMemo(() => 
+    hand.filter(h => !h.inHand),
+    [ hand ]
+  );
+
+
   if(!dataLoaded){
     return <h1>{'Loading...'}</h1>
   }
 
   return (
     <S.Board>
+      <HandZone />
       <S.DrawZone>
         <DrawZone />
       </S.DrawZone>
@@ -123,15 +132,15 @@ function Board() {
         <p>{'info'}</p>
         <InfoZone />
       </S.InfoZone>
-      <S.DiscardZone>
+      {/* <S.DiscardZone>
         <DropZone action={'discard'} />
       </S.DiscardZone>
       <S.StackInfoZone>
         <StackZone />
-      </S.StackInfoZone>
+      </S.StackInfoZone> */}
       <StackConsole />
 
-      {hand.map((c, idx) => 
+      {cardsNotInHand.map((c, idx) => 
         <SimpleCard data={c} key={c.cardIdx} />
       )}
       

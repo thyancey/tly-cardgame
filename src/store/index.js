@@ -14,6 +14,7 @@ function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
+  const [ handHolding, setHandHolding ] = useState([]);
   const [ deck, setDeck ] = useState([]);
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
@@ -48,8 +49,10 @@ function Store({children}) {
   }, [ setDataLoaded, setAllRoundData ]);
 
   const setHand = useCallback((hand, responsibleIdx) => {
+    // console.log('setHand', responsibleIdx);
     const stacks = StackHelper.calcStacks(hand);
     setStacks(stacks);
+    // console.log('setStacks', stacks)
     
     const newHand = hand.map(c => ({
       ...c,
@@ -104,13 +107,24 @@ function Store({children}) {
 
   }, [ hand, setHand, holdingIdx, setHoldingIdx, discardCard, zones ]);
 
+  const removeCardInHand = useCallback((cardIdx, state) => {
+    return setHand(hand.map(h => {
+      if(h.cardIdx === cardIdx){
+        return {
+          ...h,
+          inHand:false
+        }
+      }else{
+        return h;
+      }
+    }));
+  }, [ hand, setHand ]);
+
   const dealHand = useCallback(cardLimit => {
     topLayer = 1;
-    
     const newHand = DeckMaker.produceHand(deck.length - (cardLimit || 0), GameMaster.getRoundDeck(roundData.idx), [], topLayer);
 
     topLayer += newHand.length;
-    console.log('dealHand:', newHand)
     setHand(newHand);
   }, [ setHand, roundData.idx, deck ]);
 
@@ -214,6 +228,7 @@ function Store({children}) {
         holdingIdx: holdingIdx,
         focusedStackIdx: focusedStackIdx,
         hand: hand,
+        handHolding: handHolding,
         deck: deck,
         zones: zones,
         stacks: stacks,
@@ -228,6 +243,8 @@ function Store({children}) {
         setFocusedStackIdx: setFocusedStackIdx,
         firstCard: () => DeckMaker.getCardAtIdx(GameMaster.getRoundDeck(roundData.idx), 0),
         setCardPosition: setCardPosition,
+        // addCardInHand: addCardInHand,
+        removeCardInHand: removeCardInHand,
         dealHand: dealHand,
         dealCard: dealCard,
         discardCard: discardCard,

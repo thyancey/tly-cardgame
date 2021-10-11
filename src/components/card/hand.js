@@ -67,8 +67,8 @@ function usePosition(restingPosition, dragPosition){
   }
 }
 
-function SimpleCard({ data, theme='white' }) {
-  const { setCardPosition, setHoldingIdx, setFocusedStackIdx, focusedStackIdx } = useContext(StoreContext);
+function HandCard({ data, theme='white' }) {
+  const { setCardPosition, setHoldingIdx, setFocusedStackIdx, focusedStackIdx, removeCardInHand } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
     dragPosition: null
@@ -83,8 +83,8 @@ function SimpleCard({ data, theme='white' }) {
 
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
-    console.log('down')
     setHoldingIdx(cardIdx);
+    removeCardInHand(cardIdx);
 
     setState(state => ({
       ...state,
@@ -93,7 +93,7 @@ function SimpleCard({ data, theme='white' }) {
         y: clientY
       }
     }));
-  }, [ setHoldingIdx ]);
+  }, [ setHoldingIdx, removeCardInHand ]);
 
   const onMouseDraggingCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
@@ -131,7 +131,12 @@ function SimpleCard({ data, theme='white' }) {
     }
   }, [ state.dragPosition, onMouseDraggingCard, onMouseDroppedCard ])
 
-  let position = usePosition(data.position, state.dragPosition, cardRef);
+  const pos = {
+    x: 200 + data.handPosition * 200,
+    y: 75
+  }
+  let position = usePosition(pos, state.dragPosition, cardRef);
+  // let position = usePosition(data.position, state.dragPosition, cardRef);
 
   const stackStyle = useMemo(() => 
     {
@@ -172,4 +177,4 @@ function SimpleCard({ data, theme='white' }) {
   );
 }
 
-export default SimpleCard;
+export default HandCard;

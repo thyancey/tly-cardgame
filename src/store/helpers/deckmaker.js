@@ -142,6 +142,7 @@ const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
     cardIdx: cardIdx,
     deckIdx: deckCard.deckIdx,
     info: deckCard,
+    inHand: true,
     status: null,
     layer: topLayer,
     position: newPos
