@@ -91,23 +91,22 @@ S.BgImage = styled.img`
 `;
 
 function Board() {
-  const { hand, setFocusedStackIdx, dataLoaded, loadData } = useContext(StoreContext);
+  const { actions, hand, dataLoaded  } = useContext(StoreContext);
 
   /* unhovering stack makes the highlight go away */
   const onBgMouseOver = useCallback(() => {
-    setFocusedStackIdx(-1);
-  }, [ setFocusedStackIdx ]);
+    actions.setFocusedStackIdx(-1);
+  }, [ actions.setFocusedStackIdx ]);
 
   useEffect(() => {
-    console.log("only once please")
     const urlParams = new URLSearchParams(window.location.search);
-    const deckUrl = urlParams.get('deck');
-    if(deckUrl){
-      loadData(deckUrl);
+    const packUrl = urlParams.get('pack');
+    if(packUrl){
+      actions.loadData(packUrl);
     }else{
-      loadData();
+      actions.loadData();
     }
-  }, [ loadData ]);
+  }, [ actions.loadData ]);
 
   const cardsNotInHand = useMemo(() => 
     hand.filter(h => !h.inHand),

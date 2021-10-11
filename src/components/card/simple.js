@@ -68,7 +68,7 @@ function usePosition(restingPosition, dragPosition){
 }
 
 function SimpleCard({ data, theme='white' }) {
-  const { setCardPosition, setHoldingIdx, setFocusedStackIdx, focusedStackIdx } = useContext(StoreContext);
+  const { actions, focusedStackIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
     dragPosition: null
@@ -78,13 +78,12 @@ function SimpleCard({ data, theme='white' }) {
 
   
   const onMouseOver = useCallback((e, stackIdx) => {
-    setFocusedStackIdx(stackIdx);
-  }, [ setFocusedStackIdx ]);
+    actions.setFocusedStackIdx(stackIdx);
+  }, [ actions.setFocusedStackIdx ]);
 
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
-    console.log('down')
-    setHoldingIdx(cardIdx);
+    actions.setHoldingIdx(cardIdx);
 
     setState(state => ({
       ...state,
@@ -93,7 +92,7 @@ function SimpleCard({ data, theme='white' }) {
         y: clientY
       }
     }));
-  }, [ setHoldingIdx ]);
+  }, [ actions.setHoldingIdx ]);
 
   const onMouseDraggingCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
@@ -112,12 +111,12 @@ function SimpleCard({ data, theme='white' }) {
       dragPosition:null
     }));
 
-    setCardPosition(data.cardIdx, {
+    actions.setCardPosition(data.cardIdx, {
       x: clientX,
       y: clientY
     }, true);
 
-  }, [ data.cardIdx, setCardPosition ]);
+  }, [ data.cardIdx, actions.setCardPosition ]);
 
   useEffect(() => {
     if(!!state.dragPosition){

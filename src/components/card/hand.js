@@ -68,7 +68,7 @@ function usePosition(restingPosition, dragPosition){
 }
 
 function HandCard({ data, theme='white' }) {
-  const { setCardPosition, setHoldingIdx, setFocusedStackIdx, focusedStackIdx, removeCardInHand } = useContext(StoreContext);
+  const { actions, focusedStackIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
     dragPosition: null
@@ -78,13 +78,13 @@ function HandCard({ data, theme='white' }) {
 
   
   const onMouseOver = useCallback((e, stackIdx) => {
-    setFocusedStackIdx(stackIdx);
-  }, [ setFocusedStackIdx ]);
+    actions.setFocusedStackIdx(stackIdx);
+  }, [ actions.setFocusedStackIdx ]);
 
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
-    setHoldingIdx(cardIdx);
-    removeCardInHand(cardIdx);
+    actions.setHoldingIdx(cardIdx);
+    actions.removeCardInHand(cardIdx);
 
     setState(state => ({
       ...state,
@@ -93,7 +93,7 @@ function HandCard({ data, theme='white' }) {
         y: clientY
       }
     }));
-  }, [ setHoldingIdx, removeCardInHand ]);
+  }, [ actions.setHoldingIdx, actions.removeCardInHand ]);
 
   const onMouseDraggingCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
@@ -112,12 +112,12 @@ function HandCard({ data, theme='white' }) {
       dragPosition:null
     }));
 
-    setCardPosition(data.cardIdx, {
+    actions.setCardPosition(data.cardIdx, {
       x: clientX,
       y: clientY
     }, true);
 
-  }, [ data.cardIdx, setCardPosition ]);
+  }, [ data.cardIdx, actions.setCardPosition ]);
 
   useEffect(() => {
     if(!!state.dragPosition){

@@ -20,7 +20,7 @@ const setCardPackData = (cardPackData, scoreMap, cardPackName) => {
   store.cardPack = cardPackData.map(c => ({
     id: c.id,
     title: c.title || 'no title',
-    imageUrl: DeckMaker.getCompleteCardUrl(c, `./decks/${cardPackName}`),
+    imageUrl: DeckMaker.getCompleteCardUrl(c, `./packs/${cardPackName}`),
     meta: DeckMaker.parseMeta(c.meta, scoreMap),
     deckIdx: deckIdx++
   })).flat();

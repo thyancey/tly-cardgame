@@ -25,7 +25,7 @@ const createDeckFromData = (deckName, deckList, scoreMap) => {
   let deckIdx = 0;
   return deckList.map(c => ({
     title: c.title || 'no title',
-    imageUrl: ThisModule.getCompleteCardUrl(c, `./decks/${deckName}`),
+    imageUrl: ThisModule.getCompleteCardUrl(c, `./packs/${deckName}`),
     meta: ThisModule.parseMeta(c.meta, scoreMap),
     deckIdx: deckIdx++
   })).flat()

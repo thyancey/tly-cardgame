@@ -7,14 +7,13 @@ import DataHelper from './helpers/data';
 
 let topLayer = 0;
 
-// const DEFAULT_DECK = 'sample';
-const DEFAULT_DECK = 'traditional';
+// const DEFAULT_PACK = 'sample';
+const DEFAULT_PACK = 'traditional';
 
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
-  const [ handHolding, setHandHolding ] = useState([]);
   const [ deck, setDeck ] = useState([]);
   const [ zones, setZones ] = useState([]);
   const [ stacks, setStacks ] = useState([]);
@@ -25,17 +24,16 @@ function Store({children}) {
     setRoundData(GameMaster.getRoundData(newRoundIdx));
   }, [ setRoundData ]);
 
-  const loadData = useCallback(deckName => {
-    deckName = deckName || DEFAULT_DECK;
+  const loadData = useCallback(packName => {
+    packName = packName || DEFAULT_PACK;
 
-
-    const dataUrl = `./decks/${deckName}/data.json`;
+    const dataUrl = `./packs/${packName}/data.json`;
     // console.log('loading data from ', dataUrl);
     DataHelper.loadData(dataUrl, (data) => {
       try{
         console.log('heres your data', data);
-        GameMaster.setRoundData(data.deck.rounds);
-        GameMaster.setCardPackData(data.deck.cards, data.deck.scoreMap, data.deck.name);
+        GameMaster.setRoundData(data.pack.rounds);
+        GameMaster.setCardPackData(data.pack.cards, data.pack.scoreMap, data.pack.name);
 
         const roundIdx = 0;
         setAllRoundData(roundIdx);
@@ -225,31 +223,30 @@ function Store({children}) {
   return (
     <StoreContext.Provider 
       value={{
+        dataLoaded: dataLoaded,
+        deck: deck,
+        hand: hand,
+        stacks: stacks,
+        zones: zones,
+        roundData: roundData,
         holdingIdx: holdingIdx,
         focusedStackIdx: focusedStackIdx,
-        hand: hand,
-        handHolding: handHolding,
-        deck: deck,
-        zones: zones,
-        stacks: stacks,
-        dataLoaded: dataLoaded,
-        roundData: roundData,
-        setZone: setZone,
-        nextRound: nextRound,
-        prevRound: prevRound,
-        setRound: setRound,
-        loadData: loadData,
-        setHoldingIdx: setHoldingIdx,
-        setFocusedStackIdx: setFocusedStackIdx,
-        firstCard: () => DeckMaker.getCardAtIdx(GameMaster.getRoundDeck(roundData.idx), 0),
-        setCardPosition: setCardPosition,
-        // addCardInHand: addCardInHand,
-        removeCardInHand: removeCardInHand,
-        dealHand: dealHand,
-        dealCard: dealCard,
-        discardCard: discardCard,
-        discardRandomCard: discardRandomCard,
-        discardHand: discardHand
+        actions:{
+          nextRound: nextRound,
+          prevRound: prevRound,
+          setRound: setRound,
+          dealHand: dealHand,
+          dealCard: dealCard,
+          discardCard: discardCard,
+          discardRandomCard: discardRandomCard,
+          discardHand: discardHand,
+          loadData: loadData,
+          removeCardInHand: removeCardInHand,
+          setZone: setZone,
+          setHoldingIdx: setHoldingIdx,
+          setCardPosition: setCardPosition,
+          setFocusedStackIdx: setFocusedStackIdx,
+        }
       }}>
         {children}
     </StoreContext.Provider>

@@ -45,7 +45,7 @@ class DropZone extends React.Component{
 
   componentDidMount(){
     window.addEventListener('resize', this.onWindowResize);
-    this.context.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
+    this.context.actions.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
   }
 
   componentWillUnmount(){
@@ -53,7 +53,7 @@ class DropZone extends React.Component{
   }
 
   onWindowResize(){
-    this.context.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
+    this.context.actions.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
   }
 
   render() {
