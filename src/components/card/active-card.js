@@ -1,62 +1,17 @@
 import React, { useState, useEffect, useContext, useCallback, useRef, useMemo } from 'react';
-import styled, { css } from 'styled-components';
 import { StoreContext } from '../../store/context';
-import { mixin_textStroke, getShadow, getColor } from '../../themes/index';
+import { CARDSTATUS } from '../../utils/constants';
+import Card from './card';
 
 const S = {};
 
-S.Card = styled.div`
-  background-color: ${p => p.theme || 'white'};
-  border-radius:1rem;
-  color:black;
-
-  position:absolute;
-
-  z-index: ${p => p.depth};
-  ${p => p.isDragging && css`
-    z-index:1000;
-  `}
-
-  cursor:pointer;
-`;
-
-S.InnerCard = styled.div`
-  position:absolute;
-  width:10rem;
-  height:15rem;
-  transform-origin: 50% 50%;
-  left: -5rem;
-  top: -7.5rem;
-  transition: transform .3s cubic-bezier(1,.05,.32,1.2), opacity .3s;
-  border-radius: 1rem;
-  
-  box-shadow: ${getShadow('z3')};
-  ${p => p.stackStyle === 'stacked' && css`
-    box-shadow: 1px 3px 2px 4px ${getColor('ui_blue')};
-  `}
-  ${p => p.stackStyle === 'focused' && css`
-    box-shadow: 1px 3px 2px 4px ${getColor('ui_green')};
-  `}
-
-  ${p => p.isDragging && css`
-    transform: scaleX(1.5) scaleY(1.5);
-    opacity: .5;
-    transition: transform .1s cubic-bezier(.42,.05,.86,.13), opacity .2s;
-  `}
-`;
-
-S.Background = styled.img`
-  background-size: contain;
-  width:100%;
-  height:100%;
-  border-radius:1rem;
-`;
-
-S.DebugStatus = styled.h3`
-  color:white;
-`
-
-function usePosition(restingPosition, dragPosition){
+function usePosition(restingPosition, dragPosition, status){
+  if(status === CARDSTATUS.HAND){
+    return {
+      x: 0,
+      y: 0
+    }
+  }
 
   if(!!dragPosition){
     return {
@@ -71,7 +26,7 @@ function usePosition(restingPosition, dragPosition){
   }
 }
 
-function SimpleCard({ data, theme='white' }) {
+function ActiveCard({ data, theme='white' }) {
   const { actions, focusedStackIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
@@ -88,11 +43,11 @@ function SimpleCard({ data, theme='white' }) {
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
     actions.holdCard(cardIdx);
-    console.log('hold', cardIdx)
-    console.log('dragPosition', {
-      x: clientX,
-      y: clientY
-    })
+    // console.log('hold', cardIdx)
+    // console.log('dragPosition', {
+    //   x: clientX,
+    //   y: clientY
+    // })
 
     setState(state => ({
       ...state,
@@ -120,7 +75,7 @@ function SimpleCard({ data, theme='white' }) {
       dragPosition:null
     }));
 
-    console.log('simple: mouseDropped', data.cardIdx);
+    // console.log('simple: mouseDropped', data.cardIdx);
     actions.dropCard(data.cardIdx, 'TABLE', {
       x: clientX,
       y: clientY
@@ -140,7 +95,7 @@ function SimpleCard({ data, theme='white' }) {
     }
   }, [ state.dragPosition, onMouseDraggingCard, onMouseDroppedCard ])
 
-  let position = usePosition(data.position, state.dragPosition, cardRef);
+  let position = usePosition(data.position, state.dragPosition, data.status);
 
   const stackStyle = useMemo(() => 
     {
@@ -158,28 +113,18 @@ function SimpleCard({ data, theme='white' }) {
   );
 
   return (
-    <S.Card
-      id={`card-${data.cardIdx}`} 
+    <Card
+      data={data}
       theme={theme} 
-      isDragging={!!state.dragPosition}
-      onMouseDown={e => onMouseDown(e, data.cardIdx)}
-      onMouseOver={e => onMouseOver(e, data.stackIdx)}
-      depth={data.layer}
-      ref={cardRef}
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-      }}
-    >
-      <S.InnerCard 
-        isDragging={!!state.dragPosition}
-        stackStyle={stackStyle}
-      >
-        <S.DebugStatus>{data.status}</S.DebugStatus>
-        <S.Background src={data.info.imageUrl} draggable={false} />
-      </S.InnerCard>
-    </S.Card>
+      onMouseDown={onMouseDown}
+      onMouseOver={onMouseOver}
+      cardRef={cardRef}
+      inHand={false}
+      position={position}
+      dragPosition={state.dragPosition}
+      stackStyle={stackStyle} >
+    </Card>
   );
 }
 
-export default SimpleCard;
+export default ActiveCard;

@@ -5,7 +5,7 @@ import StackHelper from '../../../store/helpers/stack';
 import MetaHelper from '../../../store/helpers/meta';
 import { getColor, mixinFontFamily } from '../../../themes/index';
 
-import InfoCard from '../../../components/card/infocard';
+// import InfoCard from '../../../components/card/infocard';
 
 const S = {};
 
@@ -208,7 +208,7 @@ const makeLittleCards = cards => {
     const translateString = `translate(${x}px, ${y}px) rotate(${deg}deg)`;
     return (
       <li key={cIdx} style={{transform: translateString}}>
-        <InfoCard data={c} />
+        {/* <InfoCard data={c} /> */}
       </li>
     )
   })

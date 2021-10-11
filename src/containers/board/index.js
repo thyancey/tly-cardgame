@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
-import SimpleCard from '../../components/card/simple';
+import ActiveCard from '../../components/card/active-card';
 import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
@@ -120,7 +120,9 @@ function Board() {
   }, [ actions.loadData ]);
 
   const cardsOnTable = useMemo(() => 
-    hand.filter(h => h.status > CARDSTATUS.HAND_HOLDING && h.status < CARDSTATUS.DISCARDED),
+    // hand.map(h => h)
+    hand.filter(h => h.status > CARDSTATUS.HAND && h.status < CARDSTATUS.DISCARDED),
+    // hand.filter(h => h.status > CARDSTATUS.HAND_HOLDING && h.status < CARDSTATUS.DISCARDED),
     [ hand ]
   );
   // const heldCard = useMemo(() => 
@@ -158,7 +160,7 @@ function Board() {
 
       <S.CardContainer id="cc">
         {cardsOnTable.map((c, idx) => 
-          <SimpleCard data={c} key={c.cardIdx} />
+          <ActiveCard data={c} key={c.cardIdx} />
         )}
       </S.CardContainer>
 

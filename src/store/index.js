@@ -187,7 +187,8 @@ function Store({children}) {
 
   const holdCardStatus = status => {
     if(status === CARDSTATUS.HAND){
-      return CARDSTATUS.HAND_HOLDING;
+      // return CARDSTATUS.HAND_HOLDING;
+      return CARDSTATUS.TABLE;
     }else if(status === CARDSTATUS.TABLE){
       return CARDSTATUS.TABLE_HOLDING;
     }else{
@@ -219,7 +220,7 @@ function Store({children}) {
   }, [ setHoldingIdx, hand, setHand ]);
 
   const dropCard = useCallback((cardIdx, location, newPosition) => {
-    console.log('drop ', cardIdx);
+    // console.log('drop ', cardIdx);
     setHoldingIdx(-1);
     if(cardIdx === holdingIdx){
       setHoldingIdx(-1);
