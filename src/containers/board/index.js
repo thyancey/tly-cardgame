@@ -6,6 +6,7 @@ import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
 import StackZone from './components/stack-zone';
+import StackConsole from './components/stack-console';
 import RoundZone from './components/round-zone';
 import InfoZone from './components/info-zone';
 
@@ -78,7 +79,7 @@ S.Bg = styled.div`
   background-color: ${getColor('black')};
   width:100%;
   height:100%;
-  z-index:-1;
+  z-index:-9999999;
 `;
 
 S.BgImage = styled.img`
@@ -128,6 +129,7 @@ function Board() {
       <S.StackInfoZone>
         <StackZone />
       </S.StackInfoZone>
+      <StackConsole />
 
       {hand.map((c, idx) => 
         <SimpleCard data={c} key={c.cardIdx} />

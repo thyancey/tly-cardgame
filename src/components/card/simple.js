@@ -148,7 +148,8 @@ function SimpleCard({ data, theme='white' }) {
   );
 
   return (
-    <S.Card 
+    <S.Card
+      id={`card-${data.cardIdx}`} 
       theme={theme} 
       isDragging={!!state.dragPosition}
       onMouseDown={e => onMouseDown(e, data.cardIdx)}
