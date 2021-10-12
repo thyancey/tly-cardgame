@@ -1,0 +1,1268 @@
+{
+  "config":{
+  },
+  "pack":{
+    "name": "traditional",
+    "scoreMap":{
+      "label": 100,
+      "color": 5,
+      "suit": 20,
+      "value": 80,
+      "royalty": 20,
+      "sex": 50
+    },
+    "rounds":[
+      {
+        "title": "just twos",
+        "targetScore": 740,
+        "deck":[ 
+          "2H",
+          "2C",
+          "2D",
+          "2S"
+        ]
+      },
+      {
+        "title": "only royalty",
+        "targetScore": 2160,
+        "deck":[ 
+          "KH",
+          "KD",
+          "KC",
+          "KS",
+          "QH",
+          "QD",
+          "QC",
+          "QS",
+          "JH",
+          "JD",
+          "JC",
+          "JS"
+        ]
+      },
+      {
+        "title": "colorful cast",
+        "targetScore": 60,
+        "exactScore": true,
+        "allStacked": true,
+        "deck":[ 
+          "KH",
+          "KD",
+          "KC",
+          "KS",
+          "QH",
+          "QD",
+          "QC",
+          "QS",
+          "JH",
+          "JD",
+          "JC",
+          "JS"
+        ]
+      },
+      {
+        "title": "all of em",
+        "targetScore": 2630,
+        "deck":null
+      }
+    ],
+    "cards":[
+      {
+        "id": "2H",
+        "title": "2 of Hearts",
+        "assetPath": "2H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            2
+          ],
+          [
+            "label",
+            "2"
+          ]
+        ]
+      },
+      {
+        "id": "3H",
+        "title": "3 of Hearts",
+        "assetPath": "3H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            3
+          ],
+          [
+            "label",
+            "3"
+          ]
+        ]
+      },
+      {
+        "id": "4H",
+        "title": "4 of Hearts",
+        "assetPath": "4H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            4
+          ],
+          [
+            "label",
+            "4"
+          ]
+        ]
+      },
+      {
+        "id": "5H",
+        "title": "5 of Hearts",
+        "assetPath": "5H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            5
+          ],
+          [
+            "label",
+            "5"
+          ]
+        ]
+      },
+      {
+        "id": "6H",
+        "title": "6 of Hearts",
+        "assetPath": "6H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            6
+          ],
+          [
+            "label",
+            "6"
+          ]
+        ]
+      },
+      {
+        "id": "7H",
+        "title": "7 of Hearts",
+        "assetPath": "7H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            7
+          ],
+          [
+            "label",
+            "7"
+          ]
+        ]
+      },
+      {
+        "id": "8H",
+        "title": "8 of Hearts",
+        "assetPath": "8H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            8
+          ],
+          [
+            "label",
+            "8"
+          ]
+        ]
+      },
+      {
+        "id": "9H",
+        "title": "9 of Hearts",
+        "assetPath": "9H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            9
+          ],
+          [
+            "label",
+            "9"
+          ]
+        ]
+      },
+      {
+        "id": "10H",
+        "title": "10 of Hearts",
+        "assetPath": "10H.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            10
+          ],
+          [
+            "label",
+            "10"
+          ]
+        ]
+      },
+      {
+        "id": "JH",
+        "title": "Jack of Hearts",
+        "assetPath": "JH.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            11
+          ],
+          [
+            "label",
+            "jack"
+          ]
+        ]
+      },
+      {
+        "id": "QH",
+        "title": "Queen of Hearts",
+        "assetPath": "QH.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            12
+          ],
+          [
+            "label",
+            "queen"
+          ]
+        ]
+      },
+      {
+        "id": "KH",
+        "title": "King of Hearts",
+        "assetPath": "KH.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            13
+          ],
+          [
+            "label",
+            "king"
+          ]
+        ]
+      },
+      {
+        "id": "AH",
+        "title": "Aces of Hearts",
+        "assetPath": "AH.jpg",
+        "meta": [
+          [
+            "suit",
+            "hearts"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            14
+          ],
+          [
+            "label",
+            "ace"
+          ]
+        ]
+      },
+      {
+        "id": "2D",
+        "title": "2 of Diamonds",
+        "assetPath": "2D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            2
+          ],
+          [
+            "label",
+            "2"
+          ]
+        ]
+      },
+      {
+        "id": "3D",
+        "title": "3 of Diamonds",
+        "assetPath": "3D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            3
+          ],
+          [
+            "label",
+            "3"
+          ]
+        ]
+      },
+      {
+        "id": "4D",
+        "title": "4 of Diamonds",
+        "assetPath": "4D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            4
+          ],
+          [
+            "label",
+            "4"
+          ]
+        ]
+      },
+      {
+        "id": "5D",
+        "title": "5 of Diamonds",
+        "assetPath": "5D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            5
+          ],
+          [
+            "label",
+            "5"
+          ]
+        ]
+      },
+      {
+        "id": "6D",
+        "title": "6 of Diamonds",
+        "assetPath": "6D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            6
+          ],
+          [
+            "label",
+            "6"
+          ]
+        ]
+      },
+      {
+        "id": "7D",
+        "title": "7 of Diamonds",
+        "assetPath": "7D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            7
+          ],
+          [
+            "label",
+            "7"
+          ]
+        ]
+      },
+      {
+        "id": "8D",
+        "title": "8 of Diamonds",
+        "assetPath": "8D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            8
+          ],
+          [
+            "label",
+            "8"
+          ]
+        ]
+      },
+      {
+        "id": "9D",
+        "title": "9 of Diamonds",
+        "assetPath": "9D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            9
+          ],
+          [
+            "label",
+            "9"
+          ]
+        ]
+      },
+      {
+        "id": "10D",
+        "title": "10 of Diamonds",
+        "assetPath": "10D.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            10
+          ],
+          [
+            "label",
+            "10"
+          ]
+        ]
+      },
+      {
+        "id": "JD",
+        "title": "Jack of Diamonds",
+        "assetPath": "JD.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            11
+          ],
+          [
+            "label",
+            "jack"
+          ]
+        ]
+      },
+      {
+        "id": "QD",
+        "title": "Queen of Diamonds",
+        "assetPath": "QD.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            12
+          ],
+          [
+            "label",
+            "queen"
+          ]
+        ]
+      },
+      {
+        "id": "KD",
+        "title": "King of Diamonds",
+        "assetPath": "KD.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            13
+          ],
+          [
+            "label",
+            "king"
+          ]
+        ]
+      },
+      {
+        "id": "AD",
+        "title": "Aces of Diamonds",
+        "assetPath": "AD.jpg",
+        "meta": [
+          [
+            "suit",
+            "diamonds"
+          ],
+          [
+            "color",
+            "red"
+          ],
+          [
+            "value",
+            14
+          ],
+          [
+            "label",
+            "ace"
+          ]
+        ]
+      },
+      {
+        "id": "2C",
+        "title": "2 of Clubs",
+        "assetPath": "2C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            2
+          ],
+          [
+            "label",
+            "2"
+          ]
+        ]
+      },
+      {
+        "id": "3C",
+        "title": "3 of Clubs",
+        "assetPath": "3C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            3
+          ],
+          [
+            "label",
+            "3"
+          ]
+        ]
+      },
+      {
+        "id": "4C",
+        "title": "4 of Clubs",
+        "assetPath": "4C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            4
+          ],
+          [
+            "label",
+            "4"
+          ]
+        ]
+      },
+      {
+        "id": "5C",
+        "title": "5 of Clubs",
+        "assetPath": "5C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            5
+          ],
+          [
+            "label",
+            "5"
+          ]
+        ]
+      },
+      {
+        "id": "6C",
+        "title": "6 of Clubs",
+        "assetPath": "6C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            6
+          ],
+          [
+            "label",
+            "6"
+          ]
+        ]
+      },
+      {
+        "id": "7C",
+        "title": "7 of Clubs",
+        "assetPath": "7C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            7
+          ],
+          [
+            "label",
+            "7"
+          ]
+        ]
+      },
+      {
+        "id": "8C",
+        "title": "8 of Clubs",
+        "assetPath": "8C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            8
+          ],
+          [
+            "label",
+            "8"
+          ]
+        ]
+      },
+      {
+        "id": "9C",
+        "title": "9 of Clubs",
+        "assetPath": "9C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            9
+          ],
+          [
+            "label",
+            "9"
+          ]
+        ]
+      },
+      {
+        "id": "10C",
+        "title": "10 of Clubs",
+        "assetPath": "10C.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            10
+          ],
+          [
+            "label",
+            "10"
+          ]
+        ]
+      },
+      {
+        "id": "JC",
+        "title": "Jack of Clubs",
+        "assetPath": "JC.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            11
+          ],
+          [
+            "label",
+            "jack"
+          ]
+        ]
+      },
+      {
+        "id": "QC",
+        "title": "Queen of Clubs",
+        "assetPath": "QC.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            12
+          ],
+          [
+            "label",
+            "queen"
+          ]
+        ]
+      },
+      {
+        "id": "KC",
+        "title": "King of Clubs",
+        "assetPath": "KC.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            13
+          ],
+          [
+            "label",
+            "king"
+          ]
+        ]
+      },
+      {
+        "id": "AC",
+        "title": "Aces of Clubs",
+        "assetPath": "AC.jpg",
+        "meta": [
+          [
+            "suit",
+            "clubs"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            14
+          ],
+          [
+            "label",
+            "ace"
+          ]
+        ]
+      },
+      {
+        "id": "2S",
+        "title": "2 of Spades",
+        "assetPath": "2S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            2
+          ],
+          [
+            "label",
+            "2"
+          ]
+        ]
+      },
+      {
+        "id": "3S",
+        "title": "3 of Spades",
+        "assetPath": "3S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            3
+          ],
+          [
+            "label",
+            "3"
+          ]
+        ]
+      },
+      {
+        "id": "4S",
+        "title": "4 of Spades",
+        "assetPath": "4S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            4
+          ],
+          [
+            "label",
+            "4"
+          ]
+        ]
+      },
+      {
+        "id": "5S",
+        "title": "5 of Spades",
+        "assetPath": "5S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            5
+          ],
+          [
+            "label",
+            "5"
+          ]
+        ]
+      },
+      {
+        "id": "6S",
+        "title": "6 of Spades",
+        "assetPath": "6S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            6
+          ],
+          [
+            "label",
+            "6"
+          ]
+        ]
+      },
+      {
+        "id": "7S",
+        "title": "7 of Spades",
+        "assetPath": "7S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            7
+          ],
+          [
+            "label",
+            "7"
+          ]
+        ]
+      },
+      {
+        "id": "8S",
+        "title": "8 of Spades",
+        "assetPath": "8S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            8
+          ],
+          [
+            "label",
+            "8"
+          ]
+        ]
+      },
+      {
+        "id": "9S",
+        "title": "9 of Spades",
+        "assetPath": "9S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            9
+          ],
+          [
+            "label",
+            "9"
+          ]
+        ]
+      },
+      {
+        "id": "10S",
+        "title": "10 of Spades",
+        "assetPath": "10S.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            10
+          ],
+          [
+            "label",
+            "10"
+          ]
+        ]
+      },
+      {
+        "id": "JS",
+        "title": "Jack of Spades",
+        "assetPath": "JS.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            11
+          ],
+          [
+            "label",
+            "jack"
+          ]
+        ]
+      },
+      {
+        "id": "QS",
+        "title": "Queen of Spades",
+        "assetPath": "QS.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            12
+          ],
+          [
+            "label",
+            "queen"
+          ]
+        ]
+      },
+      {
+        "id": "KS",
+        "title": "King of Spades",
+        "assetPath": "KS.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            13
+          ],
+          [
+            "label",
+            "king"
+          ]
+        ]
+      },
+      {
+        "id": "AS",
+        "title": "Aces of Spades",
+        "assetPath": "AS.jpg",
+        "meta": [
+          [
+            "suit",
+            "spades"
+          ],
+          [
+            "color",
+            "black"
+          ],
+          [
+            "value",
+            14
+          ],
+          [
+            "label",
+            "ace"
+          ]
+        ]
+      }
+    ]
+  }
+}
