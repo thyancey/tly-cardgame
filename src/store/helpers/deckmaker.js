@@ -1,3 +1,4 @@
+import { CARDSTATUS } from '../../utils/constants';
 import ThisModule from './deckmaker';
 
 const parseMeta = (metaArray, scoreMap) => {
@@ -25,7 +26,7 @@ const createDeckFromData = (deckName, deckList, scoreMap) => {
   let deckIdx = 0;
   return deckList.map(c => ({
     title: c.title || 'no title',
-    imageUrl: ThisModule.getCompleteCardUrl(c, `./decks/${deckName}`),
+    imageUrl: ThisModule.getCompleteCardUrl(c, `./packs/${deckName}`),
     meta: ThisModule.parseMeta(c.meta, scoreMap),
     deckIdx: deckIdx++
   })).flat()
@@ -58,8 +59,8 @@ const filterDeckToWhatsLeft = (activeCards, deck, workOrder) => {
   if(!workOrder) workOrder = [];
 
   return deck.filter((dC,idx) => {
-    const inHand = activeCards.find(aC => aC.deckIdx === dC.deckIdx) || workOrder.indexOf(dC.deckIdx) > -1;
-    return !inHand;
+    const inPlay = activeCards.find(aC => aC.deckIdx === dC.deckIdx) || workOrder.indexOf(dC.deckIdx) > -1;
+    return !inPlay;
   });
 }
 
@@ -142,7 +143,7 @@ const produceCard = (cardIdx, deck, hand, workOrder, topLayer) => {
     cardIdx: cardIdx,
     deckIdx: deckCard.deckIdx,
     info: deckCard,
-    status: null,
+    status: CARDSTATUS.HAND,
     layer: topLayer,
     position: newPos
   }

@@ -73,7 +73,7 @@ function RoundButton({ roundIdx, onClick, isActive }){
 }
 
 function RoundZone() {
-  const { nextRound, prevRound, roundData, setRound, deck, hand } = useContext(StoreContext);
+  const { roundData, deck, hand, actions } = useContext(StoreContext);
 
   const renderRounds = (count) => {
     let buttons = [];
@@ -83,7 +83,7 @@ function RoundZone() {
           key={i}
           roundIdx={i} 
           isActive={roundData.idx === i}
-          onClick={() => setRound(i)} 
+          onClick={() => actions.setRound(i)} 
         />
       );
     }
@@ -97,11 +97,11 @@ function RoundZone() {
 
   return (
     <S.Container >
-      <S.BasicButton onClick={() => prevRound()} role="button">
+      <S.BasicButton onClick={() => actions.prevRound()} role="button">
         {'-'}
       </S.BasicButton>
       { renderRounds(GameMaster.getNumRounds()) }
-      <S.BasicButton onClick={() => nextRound()} role="button">
+      <S.BasicButton onClick={() => actions.nextRound()} role="button">
         {'+'}
       </S.BasicButton>
       <S.TextArea>

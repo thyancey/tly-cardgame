@@ -58,24 +58,24 @@ S.ZoneText = styled.p`
 `;
 
 function DrawZone() {
-  const { dealHand, dealCard, discardRandomCard, discardHand } = useContext(StoreContext);
+  const { actions } = useContext(StoreContext);
 
   return (
     <S.Container >
-      <S.BasicButton onClick={() => dealHand()} role="button">
+      <S.BasicButton onClick={() => actions.dealHand()} role="button">
         {'DEAL'}
       </S.BasicButton>
-      <S.BasicButton onClick={() => dealCard(1)} role="button">
+      <S.BasicButton onClick={() => actions.dealCard(1)} role="button">
         {'DRAW 1 MORE'}
       </S.BasicButton>
-      <S.BasicButton onClick={() => discardHand()} role="button">
+      <S.BasicButton onClick={() => actions.discardHand()} role="button">
         {'DISCARD ALL'}
       </S.BasicButton>
       <hr/>
-      <S.BasicButton onClick={() => dealCard(10)} role="button">
+      <S.BasicButton onClick={() => actions.dealCard(10)} role="button">
         {'HIT 10'}
       </S.BasicButton>
-      <S.BasicButton onClick={() => discardRandomCard()} role="button">
+      <S.BasicButton onClick={() => actions.discardRandomCard()} role="button">
         {'DISCARD RANDOM'}
       </S.BasicButton>
       <S.ZoneText>{'DRAW'}</S.ZoneText>

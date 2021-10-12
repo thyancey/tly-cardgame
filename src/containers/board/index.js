@@ -1,13 +1,16 @@
-import React, { useContext, useCallback, useEffect } from 'react';
+import React, { useContext, useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
-import SimpleCard from '../../components/card/simple';
+import ActiveCard from '../../components/card/active-card';
 import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
 import StackZone from './components/stack-zone';
+import HandZone from './components/hand-zone';
+import StackConsole from './components/stack-console';
 import RoundZone from './components/round-zone';
 import InfoZone from './components/info-zone';
+import { CARDSTATUS } from '../../utils/constants';
 
 const S = {};
 
@@ -65,10 +68,10 @@ S.StackInfoZone = styled.div`
 
 S.DiscardZone = styled.div`
   position:absolute;
-  bottom:-10rem;
-  left:-4rem;
-  width: 274px;
-  height: 274px;
+  bottom:0rem;
+  left:0rem;
+  width: 100%;
+  height: 13rem;
 `;
 
 S.Bg = styled.div`
@@ -78,8 +81,9 @@ S.Bg = styled.div`
   background-color: ${getColor('black')};
   width:100%;
   height:100%;
-  z-index:-1;
+  z-index:-9999999;
 `;
+
 
 S.BgImage = styled.img`
   width: 2000px;
@@ -87,24 +91,39 @@ S.BgImage = styled.img`
   left:0;
 `;
 
+S.CardContainer = styled.div`
+
+`;
+
+S.HeldCardContainer = styled.div`
+  position:absolute;
+  left:0;
+  top:0;
+`;
+
 function Board() {
-  const { hand, setFocusedStackIdx, dataLoaded, loadData } = useContext(StoreContext);
+  const { actions, hand, dataLoaded  } = useContext(StoreContext);
 
   /* unhovering stack makes the highlight go away */
   const onBgMouseOver = useCallback(() => {
-    setFocusedStackIdx(-1);
-  }, [ setFocusedStackIdx ]);
+    actions.setFocusedStackIdx(-1);
+    actions.setFocusedCardIdx(-1);
+  }, [ actions.setFocusedStackIdx, actions.setFocusedCardIdx ]);
 
   useEffect(() => {
-    console.log("only once please")
     const urlParams = new URLSearchParams(window.location.search);
-    const deckUrl = urlParams.get('deck');
-    if(deckUrl){
-      loadData(deckUrl);
+    const packUrl = urlParams.get('pack');
+    if(packUrl){
+      actions.loadData(packUrl);
     }else{
-      loadData();
+      actions.loadData();
     }
-  }, [ loadData ]);
+  }, [ actions.loadData ]);
+
+  const cardsOnTable = useMemo(() => 
+    hand.filter(h => h.status > CARDSTATUS.HAND && h.status < CARDSTATUS.DISCARDED),
+    [ hand ]
+  );
 
   if(!dataLoaded){
     return <h1>{'Loading...'}</h1>
@@ -112,6 +131,7 @@ function Board() {
 
   return (
     <S.Board>
+      <HandZone />
       <S.DrawZone>
         <DrawZone />
       </S.DrawZone>
@@ -125,13 +145,23 @@ function Board() {
       <S.DiscardZone>
         <DropZone action={'discard'} />
       </S.DiscardZone>
-      <S.StackInfoZone>
+      {/* <S.StackInfoZone>
         <StackZone />
-      </S.StackInfoZone>
+      </S.StackInfoZone> */}
+      <StackConsole />
 
-      {hand.map((c, idx) => 
-        <SimpleCard data={c} key={c.cardIdx} />
-      )}
+
+      <S.CardContainer id="cc">
+        {cardsOnTable.map((c, idx) => 
+          <ActiveCard data={c} key={c.cardIdx} />
+        )}
+      </S.CardContainer>
+
+      {/* <S.HeldCardContainer id="hcc">
+        {heldCard && (
+          <SimpleCard data={heldCard} key={heldCard.cardIdx} />
+        )}
+      </S.HeldCardContainer> */}
       
       <S.Bg onMouseOver={onBgMouseOver}>
         {/* <S.BgImage src={'./assets/bg/bg1.jpg' } /> */}

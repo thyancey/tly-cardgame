@@ -1,34 +1,30 @@
 import React from 'react';
 import styled, { } from 'styled-components';
 import { StoreContext } from '../../../store/context';
-import { getColor } from '../../../themes';
 
 const S = {};
 
 S.Container = styled.div`
   width: 100%;
   height: 100%;
-  border: 2rem solid ${getColor('white')};
-  background-color:${getColor('purple')};
-  border-radius: 50%;
+  p{
+    opacity:0;
+    color: white;
+    transition: opacity .1s;
+    text-align:left;
+    margin-left:1rem;
+  }
+  transition: box-shadow 1s;
 
   &:hover{
     box-shadow: 0 0 1rem .2rem white;
+    transition-delay: .5s;
+    p{
+      opacity:1;
+      transition: opacity 1s;
+      transition-delay: .7s;
+    }
   }
-`;
-
-S.ZoneText = styled.p`
-  margin-top:40%;
-  font-size:3rem;
-  color: white;
-`;
-
-S.BasicButton = styled.button`
-  padding: .5rem 1.5rem;
-  font-size: 1rem;
-`;
-
-S.Zone = styled.div`
 `;
 
 /* 
@@ -45,7 +41,7 @@ class DropZone extends React.Component{
 
   componentDidMount(){
     window.addEventListener('resize', this.onWindowResize);
-    this.context.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
+    this.context.actions.setZone('hand', this.zoneRef?.current?.getBoundingClientRect());
   }
 
   componentWillUnmount(){
@@ -53,17 +49,14 @@ class DropZone extends React.Component{
   }
 
   onWindowResize(){
-    this.context.setZone('discard', this.zoneRef?.current?.getBoundingClientRect());
+    this.context.actions.setZone('hand', this.zoneRef?.current?.getBoundingClientRect());
   }
 
   render() {
     return (
       <S.Container 
         ref={this.zoneRef} >
-        <S.Zone >
-
-        </S.Zone>
-        <S.ZoneText>{'DISCARD'}</S.ZoneText>
+        <p>{'Return card to hand'}</p>
       </S.Container>
     )
   };

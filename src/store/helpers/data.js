@@ -1,5 +1,3 @@
-import ThisModule from './data';
-
 const loadData = (url, callback) => {
   console.log(`loading data ${url}...`);
   var xhr = new XMLHttpRequest();
