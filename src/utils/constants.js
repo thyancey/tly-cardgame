@@ -7,4 +7,8 @@ export const CARDSTATUS = {
   'DISCARDED':5
 }
 
+export const getCardStatusLabel = statusIdx => {
+  return Object.keys(CARDSTATUS).find(statusKey => CARDSTATUS[statusKey] === statusIdx) || 'NULL';
+}
+
 export default {};

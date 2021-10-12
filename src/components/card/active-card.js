@@ -30,27 +30,23 @@ function ActiveCard({ data, theme='white' }) {
   const { actions, focusedStackIdx } = useContext(StoreContext);
 
   const [ state, setState ] = useState({
-    dragPosition: null
+    dragPosition: null,
+    activeListener: false
   });
 
   const cardRef = useRef(null);
-
   
-  const onMouseOver = useCallback((e, stackIdx) => {
+  const onMouseOver = useCallback((e, cardIdx, stackIdx) => {
+    actions.setFocusedCardIdx(cardIdx);
     actions.setFocusedStackIdx(stackIdx);
-  }, [ actions.setFocusedStackIdx ]);
-
+  }, [ actions.setFocusedStackIdx, actions.setFocusedCardIdx ]);
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
     actions.holdCard(cardIdx);
-    // console.log('hold', cardIdx)
-    // console.log('dragPosition', {
-    //   x: clientX,
-    //   y: clientY
-    // })
 
     setState(state => ({
       ...state,
+      activeListener: true,
       dragPosition: {
         x: clientX,
         y: clientY
@@ -59,6 +55,7 @@ function ActiveCard({ data, theme='white' }) {
   }, [ actions.holdCard ]);
 
   const onMouseDraggingCard = useCallback(({ clientX, clientY }) => {
+    // console.log('onMouseDraggingCard')
     setState(state => ({
       ...state,
       dragPosition: {
@@ -72,6 +69,7 @@ function ActiveCard({ data, theme='white' }) {
   const onMouseDroppedCard = useCallback(({ clientX, clientY }) => {
     setState(state => ({
       ...state,
+      activeListener: false,
       dragPosition:null
     }));
 
@@ -84,16 +82,30 @@ function ActiveCard({ data, theme='white' }) {
   }, [ data.cardIdx, actions.dropCard ]);
 
   useEffect(() => {
-    if(!!state.dragPosition){
+    if(state.activeListener){
       cardRef.current.addEventListener('mouseleave', onMouseDroppedCard);
       cardRef.current.addEventListener('mousemove', onMouseDraggingCard);
       cardRef.current.addEventListener('mouseup', onMouseDroppedCard);
-    }else{
+    }else {
       cardRef.current.removeEventListener('mouseleave', onMouseDroppedCard);
       cardRef.current.removeEventListener('mousemove', onMouseDraggingCard);
       cardRef.current.removeEventListener('mouseup', onMouseDroppedCard);
     }
-  }, [ state.dragPosition, onMouseDraggingCard, onMouseDroppedCard ])
+  }, [ state.activeListener ]);
+
+  //- keeps position when selecting card from hand
+  useEffect(() => {
+    if(!state.initialized){
+      setState(state => ({
+        ...state,
+        activeListener:true,
+        dragPosition: {
+          x: data.position.x,
+          y: data.position.y
+        }
+      }));
+    }
+  }, [ state.initialized ]);
 
   let position = usePosition(data.position, state.dragPosition, data.status);
 

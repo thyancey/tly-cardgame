@@ -68,10 +68,10 @@ S.StackInfoZone = styled.div`
 
 S.DiscardZone = styled.div`
   position:absolute;
-  bottom:-10rem;
-  left:-4rem;
-  width: 274px;
-  height: 274px;
+  bottom:0rem;
+  left:0rem;
+  width: 100%;
+  height: 13rem;
 `;
 
 S.Bg = styled.div`
@@ -107,7 +107,8 @@ function Board() {
   /* unhovering stack makes the highlight go away */
   const onBgMouseOver = useCallback(() => {
     actions.setFocusedStackIdx(-1);
-  }, [ actions.setFocusedStackIdx ]);
+    actions.setFocusedCardIdx(-1);
+  }, [ actions.setFocusedStackIdx, actions.setFocusedCardIdx ]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -120,17 +121,9 @@ function Board() {
   }, [ actions.loadData ]);
 
   const cardsOnTable = useMemo(() => 
-    // hand.map(h => h)
     hand.filter(h => h.status > CARDSTATUS.HAND && h.status < CARDSTATUS.DISCARDED),
-    // hand.filter(h => h.status > CARDSTATUS.HAND_HOLDING && h.status < CARDSTATUS.DISCARDED),
     [ hand ]
   );
-  // const heldCard = useMemo(() => 
-  //   hand.find(h => h.status === CARDSTATUS.HAND_HOLDING || h.status === CARDSTATUS.TABLE_HOLDING),
-  //   // hand.find(h => h.status === CARDSTATUS.HAND_HOLDING),
-  //   [ hand ]
-  // );
-
 
   if(!dataLoaded){
     return <h1>{'Loading...'}</h1>
@@ -149,10 +142,10 @@ function Board() {
         <p>{'info'}</p>
         <InfoZone />
       </S.InfoZone>
-      {/* <S.DiscardZone>
+      <S.DiscardZone>
         <DropZone action={'discard'} />
       </S.DiscardZone>
-      <S.StackInfoZone>
+      {/* <S.StackInfoZone>
         <StackZone />
       </S.StackInfoZone> */}
       <StackConsole />

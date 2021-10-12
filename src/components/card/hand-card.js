@@ -13,22 +13,18 @@ function HandCard({ data, theme='white' }) {
 
   const cardRef = useRef(null);
   
-  const onMouseOver = useCallback((e, stackIdx) => {
+  const onMouseOver = useCallback((e, cardIdx, stackIdx) => {
+    actions.setFocusedCardIdx(cardIdx);
     actions.setFocusedStackIdx(stackIdx);
-  }, [ actions.setFocusedStackIdx ]);
+  }, [ actions.setFocusedStackIdx, actions.setFocusedCardIdx ]);
 
 
   const onMouseDown = useCallback(({ clientX, clientY }, cardIdx) => {
-    actions.holdCard(cardIdx);
-
-    setState(state => ({
-      ...state,
-      dragPosition: {
-        x: clientX,
-        y: clientY
-      }
-    }));
-  }, [ actions.holdCard ]);
+    actions.holdCard(cardIdx, {
+      x: clientX,
+      y: clientY
+    });
+  }, [ actions.holdCard, actions.dropCard ]);
 
   return (
     <Card

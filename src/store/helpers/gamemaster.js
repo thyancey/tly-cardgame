@@ -29,7 +29,7 @@ const setCardPackData = (cardPackData, scoreMap, cardPackName) => {
 
 const getRound = (roundIdx) => {
   try{
-    console.log('getting round', roundIdx, store.rounds)
+    // console.log('getting round', roundIdx, store.rounds)
     return store.rounds[roundIdx];
   }catch(e){
     console.error('could not retrieve current round');

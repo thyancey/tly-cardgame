@@ -15,6 +15,7 @@ const DEFAULT_PACK = 'traditional';
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
+  const [ focusedCardIdx, setFocusedCardIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
   const [ deck, setDeck ] = useState([]);
   const [ zones, setZones ] = useState([]);
@@ -187,8 +188,8 @@ function Store({children}) {
 
   const holdCardStatus = status => {
     if(status === CARDSTATUS.HAND){
-      // return CARDSTATUS.HAND_HOLDING;
-      return CARDSTATUS.TABLE;
+      return CARDSTATUS.HAND_HOLDING;
+      // return CARDSTATUS.TABLE;
     }else if(status === CARDSTATUS.TABLE){
       return CARDSTATUS.TABLE_HOLDING;
     }else{
@@ -196,14 +197,15 @@ function Store({children}) {
     }
   }
 
-  const holdCard = useCallback(cardIdx => {
+  const holdCard = useCallback((cardIdx, position) => {
     setHoldingIdx(cardIdx);
 
     setHand(hand.map(c => {
       if(c.cardIdx === cardIdx){
         return {
           ...c,
-          status:holdCardStatus(c.status)
+          status:holdCardStatus(c.status),
+          position: position ? position : c.position
         }
       }else{
         const droppedStatus = dropCardStatus(c.status);
@@ -219,25 +221,25 @@ function Store({children}) {
     }));
   }, [ setHoldingIdx, hand, setHand ]);
 
+  const placeCardInHand = useCallback(cardIdx => {
+    setHand(hand.map(c => {
+      if(c.cardIdx === cardIdx){
+        return {
+          ...c,
+          status:CARDSTATUS.HAND
+        }
+      }
+      return c;
+    }));
+  }, [ setHoldingIdx, hand, setHand ]);
+
+  /*
   const dropCard = useCallback((cardIdx, location, newPosition) => {
     // console.log('drop ', cardIdx);
     setHoldingIdx(-1);
     if(cardIdx === holdingIdx){
       setHoldingIdx(-1);
     }
-/*
-    const foundCard = hand.find(c => c.cardIdx === cardIdx);
-    if(foundCard && didDrop){
-      let activeZones = null;
-      if(foundCard){
-        activeZones = getZonesAtPosition(newPosition, zones);
-      }
-
-      if(activeZones.find(az => az.id === 'discard')){
-        discardCard(cardIdx);
-        return;
-      }
-    }*/
 
     setHand(hand.map(c => {
       if(c.cardIdx === cardIdx){
@@ -255,6 +257,45 @@ function Store({children}) {
       return c;
     }));
   }, [ setHoldingIdx, hand, setHand, holdingIdx ]);
+  */
+
+  const dropCard = useCallback((cardIdx, location, newPosition) => {
+    // console.log('drop ', cardIdx);
+    setHoldingIdx(-1);
+    if(cardIdx === holdingIdx){
+      setHoldingIdx(-1);
+    }
+
+    const foundCard = hand.find(c => c.cardIdx === cardIdx);
+    if(foundCard && location === 'TABLE'){
+      let activeZones = [];
+      if(foundCard){
+        activeZones = getZonesAtPosition(newPosition, zones);
+      }
+
+      if(activeZones.find(az => az.id === 'hand')){
+        placeCardInHand(cardIdx);
+
+        return;
+      }
+    }
+
+    setHand(hand.map(c => {
+      if(c.cardIdx === cardIdx){
+        return {
+          ...c,
+          status:dropCardStatus(c.status, location),
+          layer: topLayer++,
+          position: newPosition ? {
+            x: newPosition.x,
+            y: newPosition.y
+          } : c.position
+        }
+      }
+      
+      return c;
+    }));
+  }, [ setHoldingIdx, hand, setHand, holdingIdx, zones, placeCardInHand ]);
 
   return (
     <StoreContext.Provider 
@@ -267,6 +308,7 @@ function Store({children}) {
         roundData: roundData,
         holdingIdx: holdingIdx,
         focusedStackIdx: focusedStackIdx,
+        focusedCardIdx: focusedCardIdx,
         actions:{
           nextRound: nextRound,
           prevRound: prevRound,
@@ -280,8 +322,10 @@ function Store({children}) {
           setZone: setZone,
           setHoldingIdx: setHoldingIdx,
           setFocusedStackIdx: setFocusedStackIdx,
+          setFocusedCardIdx: setFocusedCardIdx,
           holdCard: holdCard,
-          dropCard: dropCard
+          dropCard: dropCard,
+          placeCardInHand: placeCardInHand,
         }
       }}>
         {children}

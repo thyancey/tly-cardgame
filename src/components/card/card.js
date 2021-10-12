@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { mixin_textStroke, getShadow, getColor } from '../../themes/index';
 // import InnerCard from './inner-card';
+import { getCardStatusLabel } from '../../utils/constants';
 
 const S = {};
 
@@ -64,7 +65,7 @@ S.Background = styled.img`
   border-radius:1rem;
 `;
 
-S.DebugStatus = styled.h3`
+S.DebugStatus = styled.p`
   color:white;
   position:absolute;
   bottom:100%;
@@ -77,7 +78,7 @@ function AbstractCard({ onMouseDown, onMouseOver, position, cardRef, stackStyle,
       theme={theme} 
       isDragging={!!dragPosition}
       onMouseDown={e => onMouseDown(e, data.cardIdx)}
-      onMouseOver={e => onMouseOver(e, data.stackIdx)}
+      onMouseOver={e => onMouseOver(e, data.cardIdx, data.stackIdx)}
       depth={data.layer}
       ref={cardRef}
       inHand={inHand}
@@ -91,7 +92,7 @@ function AbstractCard({ onMouseDown, onMouseOver, position, cardRef, stackStyle,
         inHand={inHand}
         stackStyle={stackStyle}
       >
-        <S.DebugStatus>{data.status}</S.DebugStatus>
+        <S.DebugStatus>{getCardStatusLabel(data.status)}</S.DebugStatus>
         <S.Background src={data.info.imageUrl} draggable={false} />
       </S.InnerCard>
     </S.Card>
