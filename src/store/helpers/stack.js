@@ -1,4 +1,5 @@
 import ThisModule from './stack';
+import { CARDSTATUS } from '../../utils/constants';
 
 const BOUND_OFFSET = {
   W: 50,
@@ -28,7 +29,8 @@ const produceBounds = position => {
 
 // cards only start with position, calc the bounds once please
 const createBoundedHand = hand => {
-  return hand.map(c => ({
+  // only stack cards in play
+  return hand.filter(c => c.status === CARDSTATUS.TABLE).map(c => ({
     cardIdx: c.cardIdx,
     bounds: ThisModule.produceBounds(c.position)
   }));

@@ -9,10 +9,11 @@ const S = {};
 S.Hand = styled.div`
   position:absolute;
   width:100%;
-  height:20rem;
+  height:6rem;
   bottom:0px;
 
   background-color:black;
+  border-top: 1rem solid white;
 `;
 
 function Hand() {

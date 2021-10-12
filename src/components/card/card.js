@@ -20,6 +20,7 @@ S.Card = styled.div`
     position:relative;
     width:10rem;
     height:15rem;
+    top:-5rem;
   `:css`
     position:absolute;
   `}
@@ -80,7 +81,7 @@ function AbstractCard({ onMouseDown, onMouseOver, position, cardRef, stackStyle,
       depth={data.layer}
       ref={cardRef}
       inHand={inHand}
-      style={{
+      style={inHand ? null : {
         left: `${position.x}px`,
         top: `${position.y}px`,
       }}
