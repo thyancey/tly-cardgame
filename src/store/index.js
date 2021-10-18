@@ -15,6 +15,8 @@ const DEFAULT_PACK = 'traditional';
 function Store({children}) {
   const [ holdingIdx, setHoldingIdx ] = useState(-1);
   const [ focusedStackIdx, setFocusedStackIdx ] = useState(-1);
+  const [ tooltipCoords, setTooltipCoords ] = useState(null);
+  const [ mouseCoords, setMouseCoords ] = useState(null);
   const [ focusedCardIdx, setFocusedCardIdx ] = useState(-1);
   const [ hand, setHandRaw ] = useState([]);
   const [ deck, setDeck ] = useState([]);
@@ -233,6 +235,15 @@ function Store({children}) {
     }));
   }, [ setHoldingIdx, hand, setHand ]);
 
+  const setFocusedStackIdxHelper = useCallback((focusedIdx, tooltipCoords) => {
+    setFocusedStackIdx(focusedIdx);
+    if(tooltipCoords){
+      setTooltipCoords(tooltipCoords);
+    }else{
+      setTooltipCoords(null);
+    }
+  }, [ setFocusedStackIdx, setTooltipCoords ]);
+
   /*
   const dropCard = useCallback((cardIdx, location, newPosition) => {
     // console.log('drop ', cardIdx);
@@ -309,6 +320,8 @@ function Store({children}) {
         holdingIdx: holdingIdx,
         focusedStackIdx: focusedStackIdx,
         focusedCardIdx: focusedCardIdx,
+        tooltipCoords: tooltipCoords,
+        mouseCoords: mouseCoords,
         actions:{
           nextRound: nextRound,
           prevRound: prevRound,
@@ -321,8 +334,9 @@ function Store({children}) {
           loadData: loadData,
           setZone: setZone,
           setHoldingIdx: setHoldingIdx,
-          setFocusedStackIdx: setFocusedStackIdx,
+          setFocusedStackIdx: setFocusedStackIdxHelper,
           setFocusedCardIdx: setFocusedCardIdx,
+          setMouseCoords: setMouseCoords,
           holdCard: holdCard,
           dropCard: dropCard,
           placeCardInHand: placeCardInHand,

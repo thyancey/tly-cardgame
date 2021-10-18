@@ -4,6 +4,7 @@ import GameMaster from '../../store/helpers/gamemaster';
 import DeckMaker from '../../store/helpers/deckmaker';
 import Store from '../../store';
 import styled from 'styled-components';
+import Tooltips from '../../components/ui/tooltips';
 
 const S = {};
 S.Container = styled.div`
@@ -20,6 +21,7 @@ function Main() {
   return (
     <S.Container>
       <Store>
+        <Tooltips />
         <Board />
       </Store>
     </S.Container>

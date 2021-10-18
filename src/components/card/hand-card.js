@@ -15,7 +15,7 @@ function HandCard({ data, theme='white' }) {
   
   const onMouseOver = useCallback((e, cardIdx, stackIdx) => {
     actions.setFocusedCardIdx(cardIdx);
-    actions.setFocusedStackIdx(stackIdx);
+    actions.setFocusedStackIdx(stackIdx, { x: e.clientX, y: e.clientY });
   }, [ actions.setFocusedStackIdx, actions.setFocusedCardIdx ]);
 
 

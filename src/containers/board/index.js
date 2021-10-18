@@ -1,20 +1,19 @@
-import React, { useContext, useCallback, useEffect, useMemo } from 'react';
+import React, { useContext, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../store/context';
 import ActiveCard from '../../components/card/active-card';
 import { getColor } from '../../themes/index';
 import DrawZone from './components/draw-zone';
 import DropZone from './components/drop-zone';
-import StackZone from './components/stack-zone';
 import HandZone from './components/hand-zone';
-import StackConsole from './components/stack-console';
 import RoundZone from './components/round-zone';
 import InfoZone from './components/info-zone';
 import { CARDSTATUS } from '../../utils/constants';
 
+import useDebounce from '../../utils/use-debounce';
+
+
 const S = {};
-
-
 S.Board = styled.div`
   position:absolute;
   top:0;
@@ -84,16 +83,13 @@ S.Bg = styled.div`
   z-index:-9999999;
 `;
 
-
 S.BgImage = styled.img`
   width: 2000px;
   top:0;
   left:0;
 `;
 
-S.CardContainer = styled.div`
-
-`;
+S.CardContainer = styled.div``;
 
 S.HeldCardContainer = styled.div`
   position:absolute;
@@ -102,7 +98,8 @@ S.HeldCardContainer = styled.div`
 `;
 
 function Board() {
-  const { actions, hand, dataLoaded  } = useContext(StoreContext);
+  const { actions, hand, dataLoaded } = useContext(StoreContext);
+  const [ mouseCoords, setMouseCoords ] = useState(null);
 
   /* unhovering stack makes the highlight go away */
   const onBgMouseOver = useCallback(() => {
@@ -124,13 +121,18 @@ function Board() {
     hand.filter(h => h.status > CARDSTATUS.HAND && h.status < CARDSTATUS.DISCARDED),
     [ hand ]
   );
+  const debouncedCoords = useDebounce(mouseCoords, 50);
+
+  useEffect(() => {
+    actions.setMouseCoords(debouncedCoords);
+  }, [ debouncedCoords, actions.setMouseCoords ]);       
 
   if(!dataLoaded){
     return <h1>{'Loading...'}</h1>
   }
 
   return (
-    <S.Board>
+    <S.Board onMouseMove={e => setMouseCoords({x: e.clientX, y: e.clientY})}>
       <HandZone />
       <S.DrawZone>
         <DrawZone />
@@ -145,26 +147,14 @@ function Board() {
       <S.DiscardZone>
         <DropZone action={'discard'} />
       </S.DiscardZone>
-      {/* <S.StackInfoZone>
-        <StackZone />
-      </S.StackInfoZone> */}
-      <StackConsole />
-
 
       <S.CardContainer id="cc">
         {cardsOnTable.map((c, idx) => 
           <ActiveCard data={c} key={c.cardIdx} />
         )}
       </S.CardContainer>
-
-      {/* <S.HeldCardContainer id="hcc">
-        {heldCard && (
-          <SimpleCard data={heldCard} key={heldCard.cardIdx} />
-        )}
-      </S.HeldCardContainer> */}
       
       <S.Bg onMouseOver={onBgMouseOver}>
-        {/* <S.BgImage src={'./assets/bg/bg1.jpg' } /> */}
         <S.BgImage src={'./assets/bg/space.jpg' } />
       </S.Bg>
     </S.Board>
